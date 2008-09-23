@@ -2,7 +2,8 @@ Source: unbound
 Section: net
 Priority: optional
 Maintainer: Robert S. Edmonds <edmonds@debian.org>
-Build-Depends: dpkg-dev (>= 1.14.9), debhelper (>= 7), doxygen,
+Uploaders: Jan Wagner <waja@cyconet.org>
+Build-Depends: dpkg-dev, debhelper (>= 7), doxygen,
  autoconf, libtool, automake, libldns-dev, libssl-dev
 Standards-Version: 3.8.0.0
 Homepage: http://www.unbound.net/

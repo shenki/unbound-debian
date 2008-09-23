@@ -1,3 +1,10 @@
+unbound (1.0.2-1~bpo40+1) etch-backports; urgency=low
+
+  * Rebuild for etch-backports.
+  * dropping versioned builddep of dpkg-dev 
+
+ -- Jan Wagner <waja@cyconet.org>  Tue, 23 Sep 2008 13:30:39 +0200
+
 unbound (1.0.2-1) unstable; urgency=low
 
   * New upstream release;
