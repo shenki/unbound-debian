@@ -1,3 +1,10 @@
+unbound (1.0.2-1+lenny1) stable-security; urgency=high
+
+  * Non-maintainer upload by the Security Team.
+  * Fix CVE-2009-3602
+
+ -- Moritz Muehlenhoff <jmm@debian.org>  Fri, 20 Nov 2009 10:21:11 +0100
+
 unbound (1.0.2-1) unstable; urgency=low
 
   * New upstream release;
