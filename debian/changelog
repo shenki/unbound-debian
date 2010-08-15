@@ -1,3 +1,10 @@
+unbound (1.4.5-1~bpo50+1) lenny-backports; urgency=low
+
+  * Rebuild for lenny-backports.
+  * Relax python related build dependencies
+
+ -- Dominic Hargreaves <dom@earth.li>  Sun, 15 Aug 2010 19:08:51 +0100
+
 unbound (1.4.5-1) unstable; urgency=low
 
   * New upstream release.
