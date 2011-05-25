@@ -1,3 +1,10 @@
+unbound (1.4.6-1~lenny1) oldstable-security; urgency=medium
+
+  * Rebuild for lenny.
+  * Switch to supplied ldns copy.
+
+ -- Florian Weimer <fw@deneb.enyo.de>  Wed, 25 May 2011 20:40:16 +0200
+
 unbound (1.4.6-1) unstable; urgency=low
 
   * New upstream release.
