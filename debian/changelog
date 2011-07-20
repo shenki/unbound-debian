@@ -1,3 +1,9 @@
+unbound (1.4.12-1~bpo60+1) unstable; urgency=low
+
+  * Backport to squeeze.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Wed, 20 Jul 2011 16:43:56 -0400
+
 unbound (1.4.12-1) unstable; urgency=medium
 
   * New upstream release.
