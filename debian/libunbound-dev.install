@@ -1,2 +1,4 @@
 usr/include/unbound.h usr/include
+usr/lib/libunbound.a usr/lib
+usr/lib/libunbound.so usr/lib
 usr/share/man/man3/libunbound.3 usr/share/man/man3
