@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 #export DH_VERBOSE=1
 
-DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+DEB_HOST_MULTIARCH =
 LIBRARY = libunbound2
 
 clean:
