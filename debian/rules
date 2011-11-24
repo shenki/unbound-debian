@@ -25,6 +25,7 @@ binary-arch: build
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure \
 		--prefix=/usr \
 		--sysconfdir=/etc \
+		--disable-gost \
 		--disable-rpath \
 		--with-pidfile=/var/run/unbound.pid \
 		--with-libevent \
@@ -50,6 +51,7 @@ binary-arch: build
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure \
 		--prefix=/usr \
 		--sysconfdir=/etc \
+		--disable-gost \
 		--disable-rpath \
 		--without-libevent \
 		--without-pythonmodule \
