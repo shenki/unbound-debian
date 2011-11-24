@@ -1,3 +1,12 @@
+unbound (1.4.13-2~bpo60+1) squeeze-backports; urgency=low
+
+  * Backport to squeeze:
+     - Revert changes in 1.4.13-1 and 1.4.13-2 to support multi-arch.
+     - Revert changes in 1.4.9-2 that require newer ldns and openssl packages
+       than exist in squeeze.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Thu, 24 Nov 2011 13:44:51 -0500
+
 unbound (1.4.13-2) unstable; urgency=low
 
   * Reduce the run-time dependencies of libunbound and the unbound-*
