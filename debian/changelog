@@ -1,3 +1,17 @@
+unbound (1.4.6-1+squeeze2) squeeze-security; urgency=high
+
+  * Apply patch from upstream to fix DNSSEC-related crashes
+    (CVE-2011-4528)
+
+ -- Florian Weimer <fw@deneb.enyo.de>  Wed, 21 Dec 2011 19:01:57 +0100
+
+unbound (1.4.6-1+squeeze1) squeeze-security; urgency=low
+
+  * Fix empty error packet handling assertion failure (CVE-2011-1922)
+    (Not actually exposed due to disabled asserts.)
+
+ -- Florian Weimer <fw@deneb.enyo.de>  Wed, 25 May 2011 20:18:07 +0200
+
 unbound (1.4.6-1) unstable; urgency=low
 
   * New upstream release.
