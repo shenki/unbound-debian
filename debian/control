@@ -8,7 +8,7 @@ Build-Depends: dpkg-dev (>= 1.14.9), debhelper (>= 7), doxygen,
  python-support, swig
 Standards-Version: 3.9.2
 Homepage: http://www.unbound.net/
-XS-Python-Version: all
+XS-Python-Version: 2.6
 Vcs-Browser: http://git.debian.org/?p=users/edmonds/unbound.git
 Vcs-Git: git://git.debian.org/~edmonds/unbound.git
 
