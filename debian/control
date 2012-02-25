@@ -2,9 +2,9 @@ Source: unbound
 Section: net
 Priority: optional
 Maintainer: Robert S. Edmonds <edmonds@debian.org>
-Build-Depends: dpkg-dev (>= 1.14.9), debhelper (>= 8.1.3~), doxygen,
+Build-Depends: dpkg-dev (>= 1.14.9), debhelper (>= 7), doxygen,
  autoconf, automake, autotools-dev, libtool, flex, bison, libldns-dev,
- libssl-dev, libevent-dev, libexpat1-dev, python-all-dev (>= 2.6.6-3~),
+ libssl-dev, libevent-dev, libexpat1-dev, python-all-dev (>= 2.5.4-1~),
  python-support, swig
 Standards-Version: 3.9.2
 Homepage: http://www.unbound.net/
@@ -47,8 +47,6 @@ Description: reimplementation of the 'host' command
 Package: libunbound2
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Pre-Depends: ${misc:Pre-Depends}
-Multi-Arch: same
 Description: library implementing DNS resolution and validation
  libunbound performs and validates DNS lookups; it can be used to convert
  hostnames to IP addresses and back and obtain other information from the
@@ -58,7 +56,6 @@ Package: libunbound-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends}, libunbound2 (= ${binary:Version})
-Multi-Arch: same
 Description: static library, header files, and docs for libunbound
  Static library, header files, and documentation for libunbound.
  .
