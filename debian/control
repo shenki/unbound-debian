@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Robert S. Edmonds <edmonds@debian.org>
 Build-Depends: dpkg-dev (>= 1.14.9), debhelper (>= 8.1.3~), doxygen,
- autoconf, automake, autotools-dev, libtool, flex, bison, libldns-dev (>= 1.6.9-2~),
+ autoconf, automake, autotools-dev, libtool, flex, bison, libldns-dev,
  libssl-dev, libevent-dev, libexpat1-dev, python-all-dev (>= 2.6.6-3~),
  python-support, swig
 Standards-Version: 3.9.2
