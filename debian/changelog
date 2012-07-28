@@ -1,3 +1,12 @@
+unbound (1.4.17-2~bpo60+1) squeeze-backports; urgency=low
+
+  * Rebuild for squeeze-backports.
+    - Revert multi-arch changes.
+    - Disable GOST support.
+    - Build-dep on dpkg-dev in squeeze-backports for build hardening.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Sat, 28 Jul 2012 16:29:34 -0400
+
 unbound (1.4.17-2) unstable; urgency=low
 
   * Build-depend on libldns-dev (>= 1.6.13~) for ECDSA support.
