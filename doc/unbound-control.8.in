@@ -1,4 +1,4 @@
-.TH "unbound-control" "8" "Aug  2, 2012" "NLnet Labs" "unbound 1.4.18"
+.TH "unbound-control" "8" "Dec 12, 2012" "NLnet Labs" "unbound 1.4.19"
 .\"
 .\" unbound-control.8 -- unbound remote control manual
 .\"
@@ -14,7 +14,7 @@
 \- Unbound remote server control utility.
 .SH "SYNOPSIS"
 .B unbound\-control
-.RB [ \-h ]
+.RB [ \-hq ]
 .RB [ \-c 
 .IR cfgfile ]
 .RB [ \-s 
@@ -38,6 +38,9 @@ config file @ub_conf_file@ is used.
 .B \-s \fIserver[@port]
 IPv4 or IPv6 address of the server to contact.  If not given, the
 address is read from the config file.
+.TP
+.B \-q
+quiet, if the option is given it does not print anything if it works ok.
 .SH "COMMANDS"
 There are several commands that the server understands.
 .TP
