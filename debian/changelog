@@ -1,3 +1,9 @@
+unbound (1.4.17-3) testing; urgency=low
+
+  * Update IPv4 address hint for D.ROOT-SERVERS.NET.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Sun, 17 Feb 2013 12:34:39 -0500
+
 unbound (1.4.17-2) unstable; urgency=low
 
   * Build-depend on libldns-dev (>= 1.6.13~) for ECDSA support.
