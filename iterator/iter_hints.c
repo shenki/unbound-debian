@@ -129,7 +129,7 @@ compile_time_root_prime(int do_ip4, int do_ip6)
 	if(!ah(dp, "A.ROOT-SERVERS.NET.", "198.41.0.4"))	return 0;
 	if(!ah(dp, "B.ROOT-SERVERS.NET.", "192.228.79.201")) return 0;
 	if(!ah(dp, "C.ROOT-SERVERS.NET.", "192.33.4.12"))	return 0;
-	if(!ah(dp, "D.ROOT-SERVERS.NET.", "128.8.10.90"))	return 0;
+	if(!ah(dp, "D.ROOT-SERVERS.NET.", "199.7.91.13"))	return 0;
 	if(!ah(dp, "E.ROOT-SERVERS.NET.", "192.203.230.10")) return 0;
 	if(!ah(dp, "F.ROOT-SERVERS.NET.", "192.5.5.241"))	return 0;
 	if(!ah(dp, "G.ROOT-SERVERS.NET.", "192.112.36.4"))	return 0;
