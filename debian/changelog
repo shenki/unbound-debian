@@ -1,3 +1,18 @@
+unbound (1.4.20-1) unstable; urgency=low
+
+  * New upstream release.
+    - Updates IPv4 address hint for D.ROOT-SERVERS.NET; closes: #697351.
+  * Correct exit code for "/etc/init.d/unbound status"; closes: #685052.
+    (Patch from micah anderson.)
+  * Finish dh_python2 conversion; closes: #697575.
+    (Patch from Micah Gersten.)
+  * Check for multiarch Python headers; closes: #697576.
+    (Patch from Micah Gersten.)
+  * Automatically set up the chroot directory if enabled; closes: #579622.
+    (Patch from Simon Deziel.)
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Sat, 13 Apr 2013 15:34:47 -0400
+
 unbound (1.4.19-1) unstable; urgency=low
 
   * New upstream release.
