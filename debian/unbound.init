@@ -19,6 +19,9 @@ test -x ${DAEMON}-checkconf || exit 0
 . /lib/lsb/init-functions
 
 UNBOUND_ENABLE=true
+UNBOUND_CONF=/etc/unbound/unbound.conf
+UNBOUND_BASE_DIR=$(dirname $UNBOUND_CONF)
+CHROOT_DIR=$(awk '{if ($1 ~ "^chroot" && $2 != "\"\"") print $2}' $UNBOUND_CONF|sed -e "s#\"##g")
 ROOT_TRUST_ANCHOR_UPDATE=false
 ROOT_TRUST_ANCHOR_FILE=/var/lib/unbound/root.key
 RESOLVCONF=false
@@ -61,7 +64,7 @@ fi
 do_resolvconf_start() {
     if $RESOLVCONF; then
         if [ -x /sbin/resolvconf ]; then
-            unbound-checkconf -o interface | (
+            unbound-checkconf $CHROOT_DIR/$UNBOUND_CONF -o interface | (
                 default=yes
                 while read interface; do
                     default=no
@@ -88,9 +91,17 @@ do_resolvconf_stop() {
     fi
 }
 
+do_chroot_setup() {
+    if [ -d "$CHROOT_DIR" -a "$CHROOT_DIR" != "$UNBOUND_BASE_DIR" ]; then
+        cd /
+        tar --overwrite -cf - $(echo $UNBOUND_BASE_DIR | sed 's#^/##') | (cd $CHROOT_DIR && tar -xf -)
+    fi
+}
+
 case "$1" in
     start)
         if $UNBOUND_ENABLE; then
+            do_chroot_setup
             if $ROOT_TRUST_ANCHOR_UPDATE; then
                 unbound-anchor -a $ROOT_TRUST_ANCHOR_FILE -v 2>&1 | logger -p daemon.info -t unbound-anchor
                 chown unbound:unbound $ROOT_TRUST_ANCHOR_FILE
@@ -125,6 +136,7 @@ case "$1" in
             start-stop-daemon --stop --quiet --pidfile $PIDFILE --name $NAME --retry 5
             do_resolvconf_stop
             if start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --name $NAME --startas $DAEMON -- $DAEMON_OPTS; then
+                do_chroot_setup
                 do_resolvconf_start
                 log_end_msg 0
             else
@@ -137,6 +149,7 @@ case "$1" in
         if $UNBOUND_ENABLE; then
             log_daemon_msg "Reloading $DESC" "$NAME"
             if start-stop-daemon --stop --pidfile $PIDFILE --signal 1; then
+                do_chroot_setup
                 log_end_msg 0
             else
                 log_end_msg 1
