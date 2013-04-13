@@ -1,5 +1,74 @@
+21 March 2013: Wouter
+	- release 1.4.20
+
+14 March 2013: Wouter
+	- iana portlist update.
+	- tag 1.4.20rc1
+
+12 March 2013: Wouter
+	- Fixup makedist.sh for windows compile.
+
+11 March 2013: Wouter
+	- iana portlist update.
+	- testcode/ldns-testpkts.c check for makedist is informational.
+
+15 February 2013: Wouter
+	- fix defines in lookup3 for bigendian bsd alpha
+
+11 February 2013: Wouter
+	- Fixup openssl_thread init code to only run if compiled with SSL.
+
+7 February 2013: Wouter
+	- detect endianness in lookup3 on BSD.
+	- add libunbound.ttl at end of result structure, version bump for
+	  libunbound and binary backwards compatible, but 1.4.19 is not
+	  forward compatible with 1.4.20.
+	- update iana port list.
+
+30 January 2013: Wouter
+	- includes and have_ssl fixes for nss.
+
+29 January 2013: Wouter
+	- printout name of zone with duplicate fwd and hint errors.
+
+28 January 2013: Wouter
+	- updated fwd_zero for newer nc. Updated common.sh for newer netstat.
+
+17 January 2013: Wouter
+	- unbound-anchors checks the emailAddress of the signer of the
+	  root.xml file, default is dnssec@iana.org.  It also checks that
+	  the signer has the correct key usage for a digital signature.
+	- update iana port list.
+
+3 January 2013: Wouter
+	- Test that unbound-control checks client credentials.
+	- Test that unbound can handle a CNAME at an intermediate node in
+	  the chain of trust (where it seeks a DS record).
+	- Check the commonName of the signer of the root.xml file in
+	  unbound-anchor, default is dnssec@iana.org.
+
+2 January 2013: Wouter
+	- Fix openssl lock free on exit (reported by Robert Fleischman).
+	- iana portlist updated.
+	- Tested that unbound implements the RFC5155 Technical Errata id 3441.
+	  Unbound already implements insecure classification of an empty
+	  nonterminal in NSEC3 optout zone.
+
+20 December 2012: Wouter
+	- Fix unbound-anchor xml parse of entity declarations for safety.
+
+19 December 2012: Wouter
+	- iana portlist updated.
+
+18 December 2012: Wouter
+	- iana portlist updated.
+
+14 December 2012: Wouter
+	- Change of D.ROOT-SERVERS.NET A address in default root hints.
+
 12 December 2012: Wouter
 	- 1.4.19 release.
+	- trunk has 1.4.20 under development.
 
 5 December 2012: Wouter
 	- note support for AAAA RR type RFC.
