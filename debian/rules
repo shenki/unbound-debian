@@ -4,10 +4,9 @@
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 LIBRARY = libunbound2
 
-CFLAGS = `dpkg-buildflags --get CFLAGS`
-CFLAGS += -fPIC
-LDFLAGS = `dpkg-buildflags --get LDFLAGS`
-CPPFLAGS = `dpkg-buildflags --get CPPFLAGS`
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
 
 clean:
 	dh clean
