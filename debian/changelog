@@ -1,3 +1,17 @@
+unbound (1.4.21-1) unstable; urgency=low
+
+  * New upstream release.
+  * Don't compress the example config file in /usr/share/doc/unbound;
+    closes: #722708.
+  * Fully enable hardening options; closes: #709837.
+    (Patch from Simon Deziel.)
+  * Add support for .d style configuration in /etc/unbound/unbound.conf.d;
+    closes: #656549.
+  * Move auto-trust-anchor-file configuration for the root into the new
+    /etc/unbound/unbound.conf.d directory.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Thu, 19 Sep 2013 21:45:39 -0400
+
 unbound (1.4.20-1) unstable; urgency=low
 
   * New upstream release.
