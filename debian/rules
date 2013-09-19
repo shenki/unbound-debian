@@ -84,7 +84,7 @@ binary-arch: build
 	dh_installman
 	dh_python2 --no-guessing-versions
 	dh_strip
-	dh_compress
+	dh_compress -Xusr/share/doc/unbound/examples/unbound.conf
 	dh_fixperms
 	dh_makeshlibs
 	dh_installdeb
