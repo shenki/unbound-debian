@@ -246,11 +246,7 @@ case "$debug_enabled" in
 		# nothing to do.
 		;;
 esac
-case "`dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null`" in
-    amd64|i386)
-    ACX_CHECK_FLTO
-    ;;
-esac
+ACX_CHECK_FLTO
 
 AC_C_INLINE
 ACX_CHECK_FORMAT_ATTRIBUTE
