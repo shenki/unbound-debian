@@ -1,4 +1,5 @@
 debian/unbound.conf etc/unbound
+debian/root-auto-trust-anchor-file.conf etc/unbound/unbound.conf.d
 usr/sbin/unbound-control usr/sbin
 usr/sbin/unbound-control-setup usr/sbin
 usr/sbin/unbound-checkconf usr/sbin
