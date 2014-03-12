@@ -1,3 +1,11 @@
+unbound (1.4.22-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Drop Build-Dependency on libldns-dev. Unbound no longer relies on
+    libldns.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Wed, 12 Mar 2014 13:21:58 -0400
+
 unbound (1.4.21-1) unstable; urgency=low
 
   * New upstream release.
