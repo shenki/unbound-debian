@@ -17,7 +17,7 @@ Build-Depends:
  libexpat1-dev,
  python-all-dev (>= 2.6.6-3~),
  swig
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Homepage: https://www.unbound.net/
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=users/edmonds/unbound.git
 Vcs-Git: git://anonscm.debian.org/users/edmonds/unbound.git
