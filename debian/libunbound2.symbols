@@ -5,6 +5,7 @@ libunbound.so.2 libunbound2 #MINVER#
  ub_ctx_async@Base 1.4.1
  ub_ctx_config@Base 1.4.1
  ub_ctx_create@Base 1.4.1
+ ub_ctx_create_event@Base 1.4.22
  ub_ctx_data_add@Base 1.4.1
  ub_ctx_data_remove@Base 1.4.1
  ub_ctx_debuglevel@Base 1.4.1
@@ -14,6 +15,7 @@ libunbound.so.2 libunbound2 #MINVER#
  ub_ctx_hosts@Base 1.4.1
  ub_ctx_print_local_zones@Base 1.4.1
  ub_ctx_resolvconf@Base 1.4.1
+ ub_ctx_set_event@Base 1.4.22
  ub_ctx_set_fwd@Base 1.4.1
  ub_ctx_set_option@Base 1.4.1
  ub_ctx_trustedkeys@Base 1.4.1
@@ -24,6 +26,7 @@ libunbound.so.2 libunbound2 #MINVER#
  ub_process@Base 1.4.1
  ub_resolve@Base 1.4.1
  ub_resolve_async@Base 1.4.1
+ ub_resolve_event@Base 1.4.22
  ub_resolve_free@Base 1.4.1
  ub_strerror@Base 1.4.1
  ub_version@Base 1.4.16
