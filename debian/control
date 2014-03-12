@@ -12,7 +12,6 @@ Build-Depends:
  libtool,
  flex,
  bison,
- libldns-dev (>= 1.6.13~),
  libssl-dev,
  libevent-dev,
  libexpat1-dev,
