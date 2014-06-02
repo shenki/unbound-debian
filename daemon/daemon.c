@@ -203,6 +203,10 @@ daemon_init(void)
 	comp_meth = (void*)SSL_COMP_get_compression_methods();
 #endif
 	(void)SSL_library_init();
+#  if defined(OPENSSL_THREADS) && !defined(THREADS_DISABLED)
+	if(!ub_openssl_lock_init())
+		fatal_exit("could not init openssl locks");
+#  endif
 #ifdef HAVE_TZSET
 	/* init timezone info while we are not chrooted yet */
 	tzset();
@@ -555,6 +559,9 @@ daemon_delete(struct daemon* daemon)
 	ERR_remove_state(0);
 	ERR_free_strings();
 	RAND_cleanup();
+#  if defined(OPENSSL_THREADS) && !defined(THREADS_DISABLED)
+	ub_openssl_lock_delete();
+#  endif
 	checklock_stop();
 #ifdef USE_WINSOCK
 	if(WSACleanup() != 0) {
