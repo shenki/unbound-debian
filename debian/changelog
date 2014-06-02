@@ -1,3 +1,10 @@
+unbound (1.4.17-3+deb7u1) stable-proposed-updates; urgency=low
+
+  [ Helmut Grohne ]
+  * Fix crash when using DNSSEC and num-threads > 1; closes: #691528.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Mon, 02 Jun 2014 16:00:29 -0400
+
 unbound (1.4.17-3) testing; urgency=low
 
   * Update IPv4 address hint for D.ROOT-SERVERS.NET.
