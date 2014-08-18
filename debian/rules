@@ -14,6 +14,8 @@ DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/buildflags.mk
 
 clean:
+	dh_autotools-dev_restoreconfig
+	dh_autoreconf_clean
 	dh clean
 
 build:
@@ -22,8 +24,8 @@ build-indep:
 
 binary-arch: build
 	dh_testdir
-
-	autoreconf -fvi
+	dh_autoreconf
+	dh_autotools-dev_updateconfig
 
 	# first build -- build unbound daemon
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure \
