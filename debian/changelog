@@ -1,3 +1,13 @@
+unbound (1.4.22-2) unstable; urgency=medium
+
+  * Drop unneeded Build-Dependency on doxygen.
+  * Drop unneeded Build-Dependency on automake. (Unbound does not use
+    automake.)
+  * Use dh_autotools-dev_updateconfig to update the config.{guess,sub} files
+    at build time; closes: #746313.
+
+ -- Robert S. Edmonds <edmonds@debian.org>  Mon, 18 Aug 2014 16:20:28 -0400
+
 unbound (1.4.22-1) unstable; urgency=medium
 
   * New upstream release.
