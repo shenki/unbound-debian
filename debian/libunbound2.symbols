@@ -1,6 +1,7 @@
 libunbound.so.2 libunbound2 #MINVER#
  ub_cancel@Base 1.4.1
  ub_ctx_add_ta@Base 1.4.1
+ ub_ctx_add_ta_autr@Base 1.5.0~rc1
  ub_ctx_add_ta_file@Base 1.4.1
  ub_ctx_async@Base 1.4.1
  ub_ctx_config@Base 1.4.1
