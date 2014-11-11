@@ -44,7 +44,7 @@ binary-arch: build
 	rm -f _unbound.la
 	sed -i -e 's/^dependency_libs=.*/dependency_libs=''/' libunbound.la
 	make _unbound.la LIBS=""
-	install -D -m 0644 .libs/_unbound.so.2.*.* \
+	install -D -m 0644 .libs/_unbound.so \
 		debian/python-unbound/usr/lib/$(shell pyversions -d)/dist-packages/_unbound.so
 	install -m 0644 \
 		pythonmod/unboundmodule.py \
