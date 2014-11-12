@@ -287,8 +287,6 @@ checkrlimits(struct config_file* cfg)
 #ifdef HAVE_SETRLIMIT
 		}
 #endif
-		log_warn("increased limit(open files) from %u to %u",
-			(unsigned)avail, (unsigned)total+10);
 	}
 #else	
 	(void)cfg;
