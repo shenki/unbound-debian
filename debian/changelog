@@ -1,3 +1,10 @@
+unbound (1.4.22-3) unstable; urgency=medium
+
+  * Fix CVE-2014-8602: denial of service by making resolver chase endless
+    series of delegations; closes: #772622.
+
+ -- Robert Edmonds <edmonds@debian.org>  Tue, 09 Dec 2014 17:52:08 -0500
+
 unbound (1.4.22-2) unstable; urgency=medium
 
   * Drop unneeded Build-Dependency on doxygen.
