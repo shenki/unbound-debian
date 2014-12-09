@@ -1,3 +1,10 @@
+unbound (1.4.17-3+deb7u2) wheezy-security; urgency=medium
+
+   * Fix CVE-2014-8602: denial of service by making resolver chase endless
+     series of delegations; closes: #772622.
+
+ -- Robert Edmonds <edmonds@debian.org>  Tue, 09 Dec 2014 18:34:57 -0500
+
 unbound (1.4.17-3+deb7u1) stable-proposed-updates; urgency=low
 
   [ Helmut Grohne ]
