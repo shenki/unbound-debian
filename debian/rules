@@ -37,8 +37,9 @@ binary-arch: build
 		--with-pythonmodule \
 		--with-pyunbound \
 		$(CONFIGURE_ARGS)
-	$(MAKE) unbound
+	$(MAKE) unbound unbound-checkconf
 	install -D -m 0755 unbound debian/unbound/usr/sbin/unbound
+	install -D -m 0755 unbound-checkconf debian/unbound/usr/sbin/unbound-checkconf
 
 	# XXX gross hack to prevent python module from linking against everything
 	rm -f _unbound.la
