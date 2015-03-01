@@ -11,7 +11,7 @@
 NAME=unbound
 DESC="recursive DNS server"
 DAEMON=/usr/sbin/unbound
-PIDFILE="/var/run/unbound.pid"
+PIDFILE="/run/unbound.pid"
 
 test -x $DAEMON || exit 0
 test -x ${DAEMON}-checkconf || exit 0

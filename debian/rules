@@ -32,7 +32,7 @@ binary-arch: build
 		--prefix=/usr \
 		--sysconfdir=/etc \
 		--disable-rpath \
-		--with-pidfile=/var/run/unbound.pid \
+		--with-pidfile=/run/unbound.pid \
 		--with-libevent \
 		--with-pythonmodule \
 		--with-pyunbound \
