@@ -1,3 +1,17 @@
+unbound (1.5.6-1) unstable; urgency=medium
+
+  * [0d5117d5] Imported Upstream version 1.5.4
+  * [8327e145] Imported Upstream version 1.5.5
+  * [eb2adc8c] Imported Upstream version 1.5.6
+    - Closes: #796934, #803042.
+  * [5a973651] debian/control: Update Maintainer, Uploaders for pkg-dns
+  * [543459fa] debian/control: Update Vcs-Browser, Vcs-Git
+  * [b69e513f] debian/: Run "wrap-and-sort -sbt"
+  * [730f3622] debian/gbp.conf: Add [dch] section
+  * [6b383656] debian/: Enable dnstap support
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 08 Nov 2015 01:26:27 -0500
+
 unbound (1.5.3-1) experimental; urgency=medium
 
   * New upstream release.
