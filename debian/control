@@ -1,7 +1,8 @@
 Source: unbound
 Section: net
 Priority: optional
-Maintainer: Robert Edmonds <edmonds@debian.org>
+Maintainer: Debian DNS Packaging <pkg-dns-devel@lists.alioth.debian.org>
+Uploaders: Robert Edmonds <edmonds@debian.org>
 Build-Depends:
  dpkg-dev (>= 1.16.1~),
  debhelper (>= 9~),
