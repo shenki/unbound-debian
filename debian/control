@@ -64,6 +64,7 @@ Description: library implementing DNS resolution and validation (Python bindings
 Package: unbound
 Architecture: any
 Depends: adduser, openssl, unbound-anchor, ${misc:Depends}, ${shlibs:Depends}
+Enhances: munin-node
 Description: validating, recursive, caching DNS resolver
  Unbound is a recursive-only caching DNS server which can perform DNSSEC
  validation of results. It implements only a minimal amount of authoritative
