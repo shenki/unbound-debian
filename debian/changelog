@@ -1,3 +1,11 @@
+unbound (1.5.7-1) unstable; urgency=medium
+
+  * [3cf7971b] debian/control: Vcs-Browser should point to cgit
+    (Closes: #804437)
+  * [66955294] Imported Upstream version 1.5.7
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 12 Dec 2015 14:48:03 -0500
+
 unbound (1.5.6-1) unstable; urgency=medium
 
   * [0d5117d5] Imported Upstream version 1.5.4
