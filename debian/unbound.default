@@ -11,8 +11,4 @@ ROOT_TRUST_ANCHOR_FILE=/var/lib/unbound/root.key
 # IP addresses as nameservers to resolvconf.
 RESOLVCONF=true
 
-# If set, resolvconf nameservers will be configured as forwarders
-# to be used by unbound.
-RESOLVCONF_FORWARDERS=true
-
 #DAEMON_OPTS="-c /etc/unbound/unbound.conf"
