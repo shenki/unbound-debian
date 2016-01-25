@@ -3,6 +3,7 @@ etc/insserv.conf.d
 etc/resolvconf/update.d
 etc/unbound
 etc/unbound/unbound.conf.d
+usr/lib/resolvconf/dpkg-event.d
 usr/lib/unbound
 usr/sbin
 usr/share/doc/unbound/contrib
