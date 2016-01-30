@@ -2,7 +2,8 @@ Source: unbound
 Section: net
 Priority: optional
 Maintainer: Debian DNS Packaging <pkg-dns-devel@lists.alioth.debian.org>
-Uploaders: Robert Edmonds <edmonds@debian.org>
+Uploaders:
+ Robert Edmonds <edmonds@debian.org>,
 Build-Depends:
  autoconf,
  autotools-dev,
@@ -30,7 +31,9 @@ Vcs-Git: git://anonscm.debian.org/pkg-dns/unbound.git
 Package: libunbound-dev
 Section: libdevel
 Architecture: any
-Depends: libunbound2 (= ${binary:Version}), ${misc:Depends}
+Depends:
+ libunbound2 (= ${binary:Version}),
+ ${misc:Depends},
 Multi-Arch: same
 Description: static library, header files, and docs for libunbound
  Static library, header files, and documentation for libunbound.
@@ -42,8 +45,11 @@ Description: static library, header files, and docs for libunbound
 Package: libunbound2
 Section: libs
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Pre-Depends: ${misc:Pre-Depends}
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Pre-Depends:
+ ${misc:Pre-Depends},
 Multi-Arch: same
 Description: library implementing DNS resolution and validation
  libunbound performs and validates DNS lookups; it can be used to convert
@@ -53,7 +59,10 @@ Description: library implementing DNS resolution and validation
 Package: python-unbound
 Section: python
 Architecture: any
-Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
 Description: library implementing DNS resolution and validation (Python bindings)
  Python extension module for libunbound.
  .
@@ -63,8 +72,14 @@ Description: library implementing DNS resolution and validation (Python bindings
 
 Package: unbound
 Architecture: any
-Depends: adduser, openssl, unbound-anchor, ${misc:Depends}, ${shlibs:Depends}
-Enhances: munin-node
+Depends:
+ adduser,
+ openssl,
+ unbound-anchor,
+ ${misc:Depends},
+ ${shlibs:Depends},
+Enhances:
+ munin-node,
 Description: validating, recursive, caching DNS resolver
  Unbound is a recursive-only caching DNS server which can perform DNSSEC
  validation of results. It implements only a minimal amount of authoritative
@@ -76,9 +91,13 @@ Description: validating, recursive, caching DNS resolver
 
 Package: unbound-anchor
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Replaces: unbound (<< 1.4.13-1)
-Breaks: unbound (<< 1.4.13-1)
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Replaces:
+ unbound (<< 1.4.13-1),
+Breaks:
+ unbound (<< 1.4.13-1),
 Description: utility to securely fetch the root DNS trust anchor
  unbound-anchor is a utility which securely fetches or updates the root DNS
  zone trust anchor. A copy of the current root anchor and root update
@@ -87,7 +106,9 @@ Description: utility to securely fetch the root DNS trust anchor
 
 Package: unbound-host
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
 Description: reimplementation of the 'host' command
  This package provides the 'unbound-host' program that is bundled with the
  Unbound domain name server. This version differs from the one provided in the
