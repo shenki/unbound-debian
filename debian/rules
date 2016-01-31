@@ -74,7 +74,7 @@ binary-arch: build
 	dh_installinit --error-handler=true --restart-after-upgrade
 
 	echo '$$named unbound' > debian/unbound/etc/insserv.conf.d/unbound
-	install -m 0755 debian/resolvconf debian/unbound/etc/resolvconf/update.d/unbound
+	install -m 0644 debian/resolvconf debian/unbound/etc/resolvconf/update.d/unbound
 	install -m 0755 debian/resolvconf-package debian/unbound/usr/lib/resolvconf/dpkg-event.d/unbound
 	install -m 0644 doc/example.conf debian/unbound/usr/share/doc/unbound/examples/unbound.conf
 	install -m 0644 contrib/update-anchor.sh debian/unbound/usr/share/doc/unbound/contrib
