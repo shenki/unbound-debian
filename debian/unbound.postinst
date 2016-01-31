@@ -3,8 +3,8 @@
 if [ "$1" = configure ]; then
     if ! getent passwd unbound >/dev/null; then
         adduser --quiet --system --group --no-create-home --home /var/lib/unbound unbound
-        chown unbound:unbound /var/lib/unbound
     fi
+    chown unbound:unbound /var/lib/unbound
 
     if [ ! -f /etc/unbound/unbound_control.key ]; then
         unbound-control-setup 1>/dev/null 2>&1 || true
