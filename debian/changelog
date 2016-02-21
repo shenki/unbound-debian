@@ -1,3 +1,37 @@
+unbound (1.5.7-2) unstable; urgency=medium
+
+  * debian/control: Add dh-python to Build-Depends
+  * debian/: Install contrib/update-anchor.sh, contrib/unbound_munin_
+    (Closes: #573329)
+  * Makefile.in: Pass PYTHON_CPPFLAGS to swig instead of CPPFLAGS (Closes:
+    #809055)
+  * debian/: Run "wrap-and-sort -sabt"
+  * debian/resolvconf: No longer use RESOLVCONF_FORWARDERS from
+    /etc/default/unbound
+  * debian/unbound.postinst: Remove unbound-anchor invocation
+  * debian/package-helper: Add helper script for init scripts and
+    resolvconf
+  * debian/unbound.init: Rewrite to use package-helper script
+  * debian/unbound.default: Remove
+  * debian/unbound.maintscript: Remove conffile /etc/default/unbound
+  * debian/resolvconf-package: Add resolvconf packaging-event hook script
+    (Closes: #777228)
+  * debian/control: unbound: Depend on dns-root-data, for root trust
+    anchor updates (Closes: #760461)
+  * debian/rules: Disable the resolvconf update.d hook by default
+  * debian/gbp.conf: Remove [dch] id-length
+  * debian/NEWS.Debian: Add NEWS entry for 1.5.7-2
+  * debian/unbound.postinst: Always chown /var/lib/unbound (Closes:
+    #763901)
+  * debian/package-helper: Invoke unbound-anchor as user/group unbound
+  * debian/: unbound.doc -> unbound.docs; Actually install upstream docs
+  * debian/unbound.docs: Install doc/README.DNS64
+  * debian/unbound.docs: Install debian/NEWS.Debian
+  * debian/package-helper: Clean old chroot files (Closes: #790392) (Patch
+    from Simon Deziel)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 21 Feb 2016 16:22:23 -0500
+
 unbound (1.5.7-1) unstable; urgency=medium
 
   * [3cf7971b] debian/control: Vcs-Browser should point to cgit
