@@ -2,8 +2,7 @@
 
 UNBOUND_CONF="/etc/unbound/unbound.conf"
 UNBOUND_BASE_DIR="$(dirname $UNBOUND_CONF)"
-
-CHROOT_DIR=$(awk '{if ($1 ~ "^chroot" && $2 != "\"\"") print $2}' $UNBOUND_CONF|sed -e "s#\"##g")
+CHROOT_DIR="$(unbound-checkconf -o chroot)"
 
 DNS_ROOT_KEY_FILE="/usr/share/dns/root.key"
 ROOT_TRUST_ANCHOR_FILE="/var/lib/unbound/root.key"
@@ -58,6 +57,7 @@ do_resolvconf_stop() {
 
 do_chroot_setup() {
     if [ -d "$CHROOT_DIR" -a "$CHROOT_DIR" != "$UNBOUND_BASE_DIR" ]; then
+        rm -rf $CHROOT_DIR/$UNBOUND_BASE_DIR && mkdir -p $CHROOT_DIR/$UNBOUND_BASE_DIR
         cd /
         tar -cf - $(echo $UNBOUND_BASE_DIR | sed 's/^\///') | (cd $CHROOT_DIR && tar -xf -)
     fi
