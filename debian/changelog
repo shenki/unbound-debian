@@ -1,3 +1,12 @@
+unbound (1.5.8-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.5.8
+  * debian/libunbound2.symbols: Add new symbol 'ub_ctx_set_stub'
+  * debian/unbound.postinst: Clean up permissions on the resolvconf
+    forwarder hook on upgrades (Closes: #816425)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 06 Mar 2016 22:52:28 -0500
+
 unbound (1.5.7-2) unstable; urgency=medium
 
   * debian/control: Add dh-python to Build-Depends
