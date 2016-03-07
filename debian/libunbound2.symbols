@@ -19,6 +19,7 @@ libunbound.so.2 libunbound2 #MINVER#
  ub_ctx_set_event@Base 1.4.22
  ub_ctx_set_fwd@Base 1.4.1
  ub_ctx_set_option@Base 1.4.1
+ ub_ctx_set_stub@Base 1.5.8
  ub_ctx_trustedkeys@Base 1.4.1
  ub_ctx_zone_add@Base 1.4.1
  ub_ctx_zone_remove@Base 1.4.1
