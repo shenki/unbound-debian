@@ -1,3 +1,13 @@
+unbound (1.5.9-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.5.9
+    - Updated L-Root IPv6 address (Closes: #818292)
+  * debian/unbound.init: Add "pidfile" magic comment (Closes: #807132)
+  * debian/libunbound2.symbols: Add new symbol 'ub_ctx_create_ub_event'
+  * Enable DNS query name minimisation by default
+
+ -- Robert Edmonds <edmonds@debian.org>  Fri, 10 Jun 2016 23:01:15 -0400
+
 unbound (1.5.8-1) unstable; urgency=medium
 
   * Imported Upstream version 1.5.8
