@@ -7,6 +7,7 @@ libunbound.so.2 libunbound2 #MINVER#
  ub_ctx_config@Base 1.4.1
  ub_ctx_create@Base 1.4.1
  ub_ctx_create_event@Base 1.4.22
+ ub_ctx_create_ub_event@Base 1.5.9
  ub_ctx_data_add@Base 1.4.1
  ub_ctx_data_remove@Base 1.4.1
  ub_ctx_debuglevel@Base 1.4.1
