@@ -1,3 +1,10 @@
+unbound (1.5.9-1~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+  * Revert "debian/: Enable dnstap support"
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 25 Jun 2016 14:27:27 -0400
+
 unbound (1.5.9-1) unstable; urgency=medium
 
   * Imported Upstream version 1.5.9
