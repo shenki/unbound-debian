@@ -15,12 +15,8 @@ Build-Depends:
  flex,
  libevent-dev,
  libexpat1-dev,
- libfstrm-dev,
- libprotobuf-c-dev,
  libssl-dev,
  libtool,
- pkg-config,
- protobuf-c-compiler,
  python-all-dev (>= 2.6.6-3~),
  swig,
 Standards-Version: 3.9.6
