@@ -33,6 +33,7 @@ binary-arch: build
 		--sysconfdir=/etc \
 		--disable-rpath \
 		--with-pidfile=/run/unbound.pid \
+		--with-rootkey-file=/var/lib/unbound/root.key \
 		--with-libevent \
 		--with-pythonmodule \
 		--with-pyunbound \
@@ -61,6 +62,7 @@ binary-arch: build
 		--prefix=/usr \
 		--sysconfdir=/etc \
 		--disable-rpath \
+		--with-rootkey-file=/var/lib/unbound/root.key \
 		--without-libevent \
 		--without-pythonmodule \
 		--without-pyunbound \
