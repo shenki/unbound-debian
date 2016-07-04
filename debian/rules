@@ -71,6 +71,10 @@ binary-arch: build
 
 	dh_installdirs
 
+	dh_systemd_enable -p unbound
+	dh_systemd_enable -p unbound --name=unbound-resolvconf
+	dh_systemd_start -p unbound unbound.service
+
 	dh_installinit --error-handler=true --restart-after-upgrade
 
 	echo '$$named unbound' > debian/unbound/etc/insserv.conf.d/unbound
