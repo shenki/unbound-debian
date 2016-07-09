@@ -1,3 +1,13 @@
+unbound (1.5.9-2) unstable; urgency=low
+
+  * debian/unbound.init: Call start-stop-daemon with --retry for 'stop'
+    action (based on patch from Julien Cristau)
+  * debian/: Add unbound.service, unbound-resolvconf.service
+    (Closes: #826241) (Thanks to Michael Biebl)
+  * debian/rules: Configure with --with-rootkey-file=/var/lib/unbound/root.key
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 24 Jul 2016 19:48:56 -0400
+
 unbound (1.5.9-1) unstable; urgency=medium
 
   * Imported Upstream version 1.5.9
