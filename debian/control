@@ -28,7 +28,7 @@ Build-Depends:
 Standards-Version: 3.9.6
 Homepage: https://www.unbound.net/
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-dns/unbound.git
-Vcs-Git: git://anonscm.debian.org/pkg-dns/unbound.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-dns/unbound.git
 
 Package: libunbound-dev
 Section: libdevel
