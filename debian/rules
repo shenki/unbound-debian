@@ -105,6 +105,11 @@ binary-arch: build
 	dh_python2 --no-guessing-versions
 	dh_strip
 	dh_compress -Xusr/share/doc/unbound/examples/unbound.conf
+
+	mkdir -p debian/unbound/etc/apparmor.d
+	cp debian/apparmor-profile debian/unbound/etc/apparmor.d/usr.sbin.unbound
+	dh_apparmor --profile-name=usr.sbin.unbound -punbound
+
 	dh_fixperms
 	dh_makeshlibs
 	dh_installdeb
