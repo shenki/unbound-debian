@@ -1,3 +1,13 @@
+unbound (1.5.9-3) unstable; urgency=medium
+
+  [ Nicolas Braud-Santoni ]
+  * debian/: Ship AppArmor profile (Closes: #518002)
+  * debian/control: Use HTTPS for Vcs-Git link
+  * debian/unbound.service: Add documentation to the systemd unit file
+  * debian/control: Bump Standards-Version to 3.9.8 (no changes)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 06 Aug 2016 14:51:52 -0400
+
 unbound (1.5.9-2) unstable; urgency=low
 
   * debian/unbound.init: Call start-stop-daemon with --retry for 'stop'
