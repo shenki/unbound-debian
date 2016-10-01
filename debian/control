@@ -21,6 +21,7 @@ Build-Depends:
  libprotobuf-c-dev,
  libssl-dev,
  libtool,
+ nettle-dev,
  pkg-config,
  protobuf-c-compiler,
  python-all-dev (>= 2.6.6-3~),
