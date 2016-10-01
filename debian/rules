@@ -28,6 +28,7 @@ binary-arch: build
 	dh_autotools-dev_updateconfig
 
 	# first build -- build unbound daemon
+	PYTHON_VERSION="$(shell py3versions -vd)" \
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
 		./configure \
 		--prefix=/usr \
@@ -66,6 +67,7 @@ binary-arch: build
 	PYTHON_VERSION="$(shell pyversions -vd)" \
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
 		./configure \
+		--prefix=/usr \
 		--disable-rpath \
 		--with-pythonmodule \
 		--with-pyunbound \
@@ -77,6 +79,24 @@ binary-arch: build
 		pythonmod/unboundmodule.py \
 		libunbound/python/unbound.py \
 		debian/python-unbound/usr/lib/$(shell pyversions -d)/dist-packages
+	$(MAKE) clean
+
+	# fourth build - pyunbound for Python 3
+	PYTHON_VERSION="$(shell py3versions -vd)" \
+	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
+		./configure \
+		--prefix=/usr \
+		--disable-rpath \
+		--with-pythonmodule \
+		--with-pyunbound \
+		$(CONFIGURE_ARGS)
+	$(MAKE) _unbound.la
+	install -D -m 0644 .libs/_unbound.so \
+		debian/python3-unbound/usr/lib/$(shell py3versions -d)/dist-packages/_unbound.so
+	install -m 0644 \
+		pythonmod/unboundmodule.py \
+		libunbound/python/unbound.py \
+		debian/python3-unbound/usr/lib/$(shell py3versions -d)/dist-packages
 	$(MAKE) clean
 
 	dh_installdirs
@@ -111,6 +131,7 @@ binary-arch: build
 	dh_installdocs
 	dh_installman
 	dh_python2 --no-guessing-versions
+	dh_python3
 	dh_strip
 	dh_compress -Xusr/share/doc/unbound/examples/unbound.conf
 

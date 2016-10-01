@@ -44,7 +44,7 @@ $ac_distutils_result])
                         python_path="-I$python_path"
                 fi
                 python_multiarch_path=`$PYTHON -c "import distutils.sysconfig; \
-                        print distutils.sysconfig.get_python_inc(plat_specific=1);"`
+                        print(distutils.sysconfig.get_python_inc(plat_specific=1));"`
                 if test -n "${python_multiarch_path}"; then
                         python_multiarch_path="-I$python_multiarch_path"
                 fi

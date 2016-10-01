@@ -25,6 +25,7 @@ Build-Depends:
  pkg-config,
  protobuf-c-compiler,
  python-all-dev (>= 2.6.6-3~),
+ python3-all-dev,
  swig,
 Standards-Version: 3.9.8
 Homepage: https://www.unbound.net/
@@ -68,6 +69,20 @@ Depends:
  ${shlibs:Depends},
 Description: library implementing DNS resolution and validation (Python bindings)
  Python extension module for libunbound.
+ .
+ libunbound performs and validates DNS lookups; it can be used to convert
+ hostnames to IP addresses and back and obtain other information from the
+ DNS. Cryptographic validation of results is performed with DNSSEC.
+
+Package: python3-unbound
+Section: python
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ ${shlibs:Depends},
+Description: library implementing DNS resolution and validation (Python3 bindings)
+ Python3 extension module for libunbound.
  .
  libunbound performs and validates DNS lookups; it can be used to convert
  hostnames to IP addresses and back and obtain other information from the
