@@ -60,7 +60,7 @@ binary-arch: build
 		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
 		$(CONFIGURE_ARGS)
 	$(MAKE)
-	$(MAKE) install DESTDIR="$(CURDIR)/debian/tmp"
+	$(MAKE) install DESTDIR="$(CURDIR)/debian/tmp-lib"
 	$(MAKE) clean
 
 	# third build - pyunbound for Python 2
@@ -116,13 +116,13 @@ binary-arch: build
 
 	mkdir -p debian/libunbound-dev/usr/lib/$(DEB_HOST_MULTIARCH)
 	mv \
-		debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libunbound.a \
-		debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libunbound.so \
+		debian/tmp-lib/usr/lib/$(DEB_HOST_MULTIARCH)/libunbound.a \
+		debian/tmp-lib/usr/lib/$(DEB_HOST_MULTIARCH)/libunbound.so \
 		debian/libunbound-dev/usr/lib/$(DEB_HOST_MULTIARCH)
 
 	mkdir -p debian/$(LIBRARY)/usr/lib/$(DEB_HOST_MULTIARCH)
 	mv \
-		debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/*.so.* \
+		debian/tmp-lib/usr/lib/$(DEB_HOST_MULTIARCH)/*.so.* \
 		debian/$(LIBRARY)/usr/lib/$(DEB_HOST_MULTIARCH)
 	chmod 0644 debian/$(LIBRARY)/usr/lib/$(DEB_HOST_MULTIARCH)/*
 
