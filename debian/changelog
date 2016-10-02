@@ -1,3 +1,14 @@
+unbound (1.5.10-1) unstable; urgency=medium
+
+  * New upstream version 1.5.10
+    - Fixes FTBFS with OpenSSL 1.1.0 (Closes: #828584)
+  * debian/: Build libunbound against nettle (Closes: #828699)
+  * debian/: Support Python 3 (Closes: #835972)
+  * debian/rules: Install libunbound.pc into the libunbound-dev package
+  * debian/copyright: Update
+
+ -- Robert Edmonds <edmonds@debian.org>  Tue, 04 Oct 2016 03:43:45 -0400
+
 unbound (1.5.9-3) unstable; urgency=medium
 
   [ Nicolas Braud-Santoni ]
