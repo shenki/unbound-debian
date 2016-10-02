@@ -61,6 +61,8 @@ binary-arch: build
 		$(CONFIGURE_ARGS)
 	$(MAKE)
 	$(MAKE) install DESTDIR="$(CURDIR)/debian/tmp-lib"
+	install -D -m 0644 contrib/libunbound.pc \
+		$(CURDIR)/debian/libunbound-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/libunbound.pc
 	$(MAKE) clean
 
 	# third build - pyunbound for Python 2
