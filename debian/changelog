@@ -1,3 +1,10 @@
+unbound (1.5.10-2) unstable; urgency=medium
+
+  * debian/unbound.install: Install usr/sbin/unbound-checkconf
+    (Closes: #842797)
+
+ -- Robert Edmonds <edmonds@debian.org>  Tue, 01 Nov 2016 16:37:52 -0400
+
 unbound (1.5.10-1) unstable; urgency=medium
 
   * New upstream version 1.5.10
