@@ -30,9 +30,7 @@ binary-arch: build
 	# first build -- build unbound daemon
 	PYTHON_VERSION="$(shell py3versions -vd)" \
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
-		./configure \
-		--prefix=/usr \
-		--sysconfdir=/etc \
+		dh_auto_configure -- \
 		--disable-rpath \
 		--with-pidfile=/run/unbound.pid \
 		--with-rootkey-file=/var/lib/unbound/root.key \
@@ -40,6 +38,7 @@ binary-arch: build
 		--with-pythonmodule \
 		--enable-dnstap \
 		--with-dnstap-socket-path=/run/dnstap.sock \
+		--libdir=/usr/lib \
 		$(CONFIGURE_ARGS)
 	$(MAKE)
 	$(MAKE) install DESTDIR="$(CURDIR)/debian/tmp"
@@ -47,9 +46,7 @@ binary-arch: build
 
 	# second build -- build libunbound only, against nettle
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
-		./configure \
-		--prefix=/usr \
-		--sysconfdir=/etc \
+		dh_auto_configure -- \
 		--disable-rpath \
 		--with-libunbound-only \
 		--with-nettle \
@@ -57,7 +54,6 @@ binary-arch: build
 		--without-libevent \
 		--without-pythonmodule \
 		--without-pyunbound \
-		--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
 		$(CONFIGURE_ARGS)
 	$(MAKE)
 	$(MAKE) install DESTDIR="$(CURDIR)/debian/tmp-lib"
@@ -68,8 +64,7 @@ binary-arch: build
 	# third build - pyunbound for Python 2
 	PYTHON_VERSION="$(shell pyversions -vd)" \
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
-		./configure \
-		--prefix=/usr \
+		dh_auto_configure -- \
 		--disable-rpath \
 		--with-pythonmodule \
 		--with-pyunbound \
@@ -86,8 +81,7 @@ binary-arch: build
 	# fourth build - pyunbound for Python 3
 	PYTHON_VERSION="$(shell py3versions -vd)" \
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
-		./configure \
-		--prefix=/usr \
+		dh_auto_configure -- \
 		--disable-rpath \
 		--with-pythonmodule \
 		--with-pyunbound \
