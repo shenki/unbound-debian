@@ -1,3 +1,12 @@
+unbound (1.5.10-3) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Fix FTCBFS: (Closes: #845941)
+    + Convert python Build-Depends to cross-friendly ones.
+    + Let dh_auto_configure pass --host to ./configure.
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 27 Nov 2016 14:41:30 -0500
+
 unbound (1.5.10-2) unstable; urgency=medium
 
   * debian/unbound.install: Install usr/sbin/unbound-checkconf
