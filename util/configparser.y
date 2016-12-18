@@ -1201,9 +1201,16 @@ server_fake_dsa: VAR_FAKE_DSA STRING_ARG
 		OUTYY(("P(server_fake_dsa:%s)\n", $2));
 		if(strcmp($2, "yes") != 0 && strcmp($2, "no") != 0)
 			yyerror("expected yes or no.");
-		else fake_dsa = (strcmp($2, "yes")==0);
-		if(fake_dsa)
-			log_warn("test option fake_dsa is enabled");
+		else {
+			int fake_dsa_val = strcmp($2, "yes")==0;
+			if(fake_dsa_val)
+#ifdef HAVE_SSL
+				log_warn("test option fake_dsa is enabled");
+			fake_dsa = fake_dsa_val;
+#else
+				log_warn("test option fake_dsa is ignored");
+#endif
+		}
 		free($2);
 	}
 	;
