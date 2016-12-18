@@ -1,3 +1,10 @@
+unbound (1.6.0-2) unstable; urgency=high
+
+  [ Helmut Grohne ]
+  * Only use fake_dsa when HAVE_SSL is defined (Closes: #848339)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 18 Dec 2016 15:00:12 -0500
+
 unbound (1.6.0-1) unstable; urgency=medium
 
   [ Robert Edmonds ]
