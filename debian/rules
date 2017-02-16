@@ -7,6 +7,10 @@ ifneq ($(DEB_HOST_ARCH), amd64)
 CONFIGURE_ARGS = --disable-flto
 endif
 
+ifneq ($(DEB_HOST_ARCH_OS), linux)
+CONFIGURE_ARGS = --with-libbsd
+endif
+
 LIBRARY = libunbound2
 DOPACKAGES = $(shell dh_listpackages)
 
