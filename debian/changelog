@@ -1,3 +1,10 @@
+unbound (1.6.0-3) unstable; urgency=medium
+
+  * Cherry-pick upstream commit svn r4000, "Include root trust anchor id
+    20326 in unbound-anchor". (Closes: #855484)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 19 Feb 2017 20:04:34 -0500
+
 unbound (1.6.0-2) unstable; urgency=high
 
   [ Helmut Grohne ]
