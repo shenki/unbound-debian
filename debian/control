@@ -25,10 +25,10 @@ Build-Depends:
  nettle-dev,
  pkg-config,
  protobuf-c-compiler <!pkg.unbound.libonly>,
- python-all-dev:any (>= 2.6.6-3~) <!pkg.unbound.libonly>,
- libpython-all-dev (>= 2.6.6-3~) <!pkg.unbound.libonly>,
- python3-all-dev:any <!pkg.unbound.libonly>,
- libpython3-all-dev <!pkg.unbound.libonly>,
+ python-dev:any (>= 2.6.6-3~) <!pkg.unbound.libonly>,
+ libpython-dev (>= 2.6.6-3~) <!pkg.unbound.libonly>,
+ python3-dev:any <!pkg.unbound.libonly>,
+ libpython3-dev <!pkg.unbound.libonly>,
  swig <!pkg.unbound.libonly>,
 Standards-Version: 4.0.0
 Homepage: https://www.unbound.net/
