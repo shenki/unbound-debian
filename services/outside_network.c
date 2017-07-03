@@ -204,6 +204,9 @@ outnet_tcp_take_into_use(struct waiting_tcp* w, uint8_t* pkt, size_t pkt_len)
 {
 	struct pending_tcp* pend = w->outnet->tcp_free;
 	int s;
+#ifdef SO_REUSEADDR
+	int on = 1;
+#endif
 	log_assert(pend);
 	log_assert(pkt);
 	log_assert(w->addrlen > 0);
@@ -225,13 +228,20 @@ outnet_tcp_take_into_use(struct waiting_tcp* w, uint8_t* pkt, size_t pkt_len)
 		return 0;
 	}
 
+#ifdef SO_REUSEADDR
+	if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (void*)&on,
+		(socklen_t)sizeof(on)) < 0) {
+		verbose(VERB_ALGO, "outgoing tcp:"
+			" setsockopt(.. SO_REUSEADDR ..) failed");
+	}
+#endif
 	if (w->outnet->tcp_mss > 0) {
 #if defined(IPPROTO_TCP) && defined(TCP_MAXSEG)
 		if(setsockopt(s, IPPROTO_TCP, TCP_MAXSEG,
 			(void*)&w->outnet->tcp_mss,
 			(socklen_t)sizeof(w->outnet->tcp_mss)) < 0) {
 			verbose(VERB_ALGO, "outgoing tcp:"
-				" setsockopt(.. SO_REUSEADDR ..) failed");
+				" setsockopt(.. TCP_MAXSEG ..) failed");
 		}
 #else
 		verbose(VERB_ALGO, "outgoing tcp:"
@@ -334,7 +344,7 @@ use_free_buffer(struct outside_network* outnet)
 		if(outnet->tcp_wait_last == w)
 			outnet->tcp_wait_last = NULL;
 		if(!outnet_tcp_take_into_use(w, w->pkt, w->pkt_len)) {
-			comm_point_callback_t* cb = w->cb;
+			comm_point_callback_type* cb = w->cb;
 			void* cb_arg = w->cb_arg;
 			waiting_tcp_delete(w);
 			fptr_ok(fptr_whitelist_pending_tcp(cb));
@@ -775,7 +785,7 @@ outside_network_create(struct comm_base *base, size_t bufsize,
 
 /** helper pending delete */
 static void
-pending_node_del(rbnode_t* node, void* arg)
+pending_node_del(rbnode_type* node, void* arg)
 {
 	struct pending* pend = (struct pending*)node;
 	struct outside_network* outnet = (struct outside_network*)arg;
@@ -784,7 +794,7 @@ pending_node_del(rbnode_t* node, void* arg)
 
 /** helper serviced delete */
 static void
-serviced_node_del(rbnode_t* node, void* ATTR_UNUSED(arg))
+serviced_node_del(rbnode_type* node, void* ATTR_UNUSED(arg))
 {
 	struct serviced_query* sq = (struct serviced_query*)node;
 	struct service_callback* p = sq->cblist, *np;
@@ -966,13 +976,13 @@ udp_sockport(struct sockaddr_storage* addr, socklen_t addrlen, int pfxlen,
 		}
 		fd = create_udp_sock(AF_INET6, SOCK_DGRAM, 
 			(struct sockaddr*)&sa, addrlen, 1, inuse, &noproto,
-			0, 0, 0, NULL, 0, freebind);
+			0, 0, 0, NULL, 0, freebind, 0);
 	} else {
 		struct sockaddr_in* sa = (struct sockaddr_in*)addr;
 		sa->sin_port = (in_port_t)htons((uint16_t)port);
 		fd = create_udp_sock(AF_INET, SOCK_DGRAM, 
 			(struct sockaddr*)addr, addrlen, 1, inuse, &noproto,
-			0, 0, 0, NULL, 0, 0);
+			0, 0, 0, NULL, 0, 0, 0);
 	}
 	return fd;
 }
@@ -1124,7 +1134,7 @@ randomize_and_send_udp(struct pending* pend, sldns_buffer* packet, int timeout)
 
 struct pending* 
 pending_udp_query(struct serviced_query* sq, struct sldns_buffer* packet,
-	int timeout, comm_point_callback_t* cb, void* cb_arg)
+	int timeout, comm_point_callback_type* cb, void* cb_arg)
 {
 	struct pending* pend = (struct pending*)calloc(1, sizeof(*pend));
 	if(!pend) return NULL;
@@ -1174,7 +1184,7 @@ outnet_tcptimer(void* arg)
 {
 	struct waiting_tcp* w = (struct waiting_tcp*)arg;
 	struct outside_network* outnet = w->outnet;
-	comm_point_callback_t* cb;
+	comm_point_callback_type* cb;
 	void* cb_arg;
 	if(w->pkt) {
 		/* it is on the waiting list */
@@ -1197,7 +1207,7 @@ outnet_tcptimer(void* arg)
 
 struct waiting_tcp*
 pending_tcp_query(struct serviced_query* sq, sldns_buffer* packet,
-	int timeout, comm_point_callback_t* callback, void* callback_arg)
+	int timeout, comm_point_callback_type* callback, void* callback_arg)
 {
 	struct pending_tcp* pend = sq->outnet->tcp_free;
 	struct waiting_tcp* w;
@@ -1301,7 +1311,7 @@ serviced_create(struct outside_network* outnet, sldns_buffer* buff, int dnssec,
 {
 	struct serviced_query* sq = (struct serviced_query*)malloc(sizeof(*sq));
 #ifdef UNBOUND_DEBUG
-	rbnode_t* ins;
+	rbnode_type* ins;
 #endif
 	if(!sq) 
 		return NULL;
@@ -1538,18 +1548,22 @@ serviced_udp_send(struct serviced_query* sq, sldns_buffer* buff)
 static int
 serviced_check_qname(sldns_buffer* pkt, uint8_t* qbuf, size_t qbuflen)
 {
-	uint8_t* d1 = sldns_buffer_at(pkt, 12);
+	uint8_t* d1 = sldns_buffer_begin(pkt)+12;
 	uint8_t* d2 = qbuf+10;
 	uint8_t len1, len2;
 	int count = 0;
+	if(sldns_buffer_limit(pkt) < 12+1+4) /* packet too small for qname */
+		return 0;
 	log_assert(qbuflen >= 15 /* 10 header, root, type, class */);
 	len1 = *d1++;
 	len2 = *d2++;
-	if(sldns_buffer_limit(pkt) < 12+1+4) /* packet too small for qname */
-		return 0;
 	while(len1 != 0 || len2 != 0) {
 		if(LABEL_IS_PTR(len1)) {
-			d1 = sldns_buffer_at(pkt, PTR_OFFSET(len1, *d1));
+			/* check if we can read *d1 with compression ptr rest */
+			if(d1 >= sldns_buffer_at(pkt, sldns_buffer_limit(pkt)))
+				return 0;
+			d1 = sldns_buffer_begin(pkt)+PTR_OFFSET(len1, *d1);
+			/* check if we can read the destination *d1 */
 			if(d1 >= sldns_buffer_at(pkt, sldns_buffer_limit(pkt)))
 				return 0;
 			len1 = *d1++;
@@ -1562,6 +1576,9 @@ serviced_check_qname(sldns_buffer* pkt, uint8_t* qbuf, size_t qbuflen)
 		if(len1 != len2)
 			return 0;
 		if(len1 > LDNS_MAX_LABELLEN)
+			return 0;
+		/* check len1 + 1(next length) are okay to read */
+		if(d1+len1 >= sldns_buffer_at(pkt, sldns_buffer_limit(pkt)))
 			return 0;
 		log_assert(len1 <= LDNS_MAX_LABELLEN);
 		log_assert(len2 <= LDNS_MAX_LABELLEN);
@@ -1587,7 +1604,7 @@ serviced_callbacks(struct serviced_query* sq, int error, struct comm_point* c,
 	uint8_t *backup_p = NULL;
 	size_t backlen = 0;
 #ifdef UNBOUND_DEBUG
-	rbnode_t* rem =
+	rbnode_type* rem =
 #else
 	(void)
 #endif
@@ -1990,7 +2007,7 @@ outnet_serviced_query(struct outside_network* outnet,
 	int nocaps, int tcp_upstream, int ssl_upstream,
 	struct sockaddr_storage* addr, socklen_t addrlen, uint8_t* zone,
 	size_t zonelen, struct module_qstate* qstate,
-	comm_point_callback_t* callback, void* callback_arg, sldns_buffer* buff,
+	comm_point_callback_type* callback, void* callback_arg, sldns_buffer* buff,
 	struct module_env* env)
 {
 	struct serviced_query* sq;

@@ -74,7 +74,7 @@ local_zones_create(void)
 
 /** helper traverse to delete zones */
 static void 
-lzdel(rbnode_t* n, void* ATTR_UNUSED(arg))
+lzdel(rbnode_type* n, void* ATTR_UNUSED(arg))
 {
 	struct local_zone* z = (struct local_zone*)n->key;
 	local_zone_delete(z);
@@ -165,7 +165,7 @@ local_zone_create(uint8_t* nm, size_t len, int labs,
 		return NULL;
 	}
 	rbtree_init(&z->data, &local_data_cmp);
-	lock_protect(&z->lock, &z->parent, sizeof(*z)-sizeof(rbnode_t));
+	lock_protect(&z->lock, &z->parent, sizeof(*z)-sizeof(rbnode_type));
 	/* also the zones->lock protects node, parent, name*, class */
 	return z;
 }
@@ -187,7 +187,9 @@ lz_enter_zone_dname(struct local_zones* zones, uint8_t* nm, size_t len,
 	lock_rw_wrlock(&z->lock);
 	if(!rbtree_insert(&zones->ztree, &z->node)) {
 		struct local_zone* oldz;
-		log_warn("duplicate local-zone");
+		char str[256];
+		dname_str(nm, str);
+		log_warn("duplicate local-zone %s", str);
 		lock_rw_unlock(&z->lock);
 		/* save zone name locally before deallocation,
 		 * otherwise, nm is gone if we zone_delete now. */
@@ -229,9 +231,8 @@ lz_enter_zone(struct local_zones* zones, const char* name, const char* type,
 	return z;
 }
 
-/** return name and class and rdata of rr; parses string */
-static int
-get_rr_content(const char* str, uint8_t** nm, uint16_t* type,
+int
+rrstr_get_rr_content(const char* str, uint8_t** nm, uint16_t* type,
 	uint16_t* dclass, time_t* ttl, uint8_t* rr, size_t len,
 	uint8_t** rdata, size_t* rdata_len)
 {
@@ -353,8 +354,8 @@ new_local_rrset(struct regional* region, struct local_data* node,
 }
 
 /** insert RR into RRset data structure; Wastes a couple of bytes */
-static int
-insert_rr(struct regional* region, struct packed_rrset_data* pd,
+int
+rrset_insert_rr(struct regional* region, struct packed_rrset_data* pd,
 	uint8_t* rdata, size_t rdata_len, time_t ttl, const char* rrstr)
 {
 	size_t* oldlen = pd->rr_len;
@@ -456,8 +457,8 @@ lz_enter_rr_into_zone(struct local_zone* z, const char* rrstr)
 	uint8_t rr[LDNS_RR_BUF_SIZE];
 	uint8_t* rdata;
 	size_t rdata_len;
-	if(!get_rr_content(rrstr, &nm, &rrtype, &rrclass, &ttl, rr, sizeof(rr),
-		&rdata, &rdata_len)) {
+	if(!rrstr_get_rr_content(rrstr, &nm, &rrtype, &rrclass, &ttl, rr,
+		sizeof(rr), &rdata, &rdata_len)) {
 		log_err("bad local-data: %s", rrstr);
 		return 0;
 	}
@@ -513,7 +514,7 @@ lz_enter_rr_into_zone(struct local_zone* z, const char* rrstr)
 		verbose(VERB_ALGO, "ignoring duplicate RR: %s", rrstr);
 		return 1;
 	} 
-	return insert_rr(z->region, pd, rdata, rdata_len, ttl, rrstr);
+	return rrset_insert_rr(z->region, pd, rdata, rdata_len, ttl, rrstr);
 }
 
 /** enter a data RR into auth data; a zone for it must exist */
@@ -629,7 +630,7 @@ lz_enter_override(struct local_zones* zones, char* zname, char* netblock,
 
 	/* create netblock addr_tree if not present yet */
 	if(!z->override_tree) {
-		z->override_tree = (struct rbtree_t*)regional_alloc_zero(
+		z->override_tree = (struct rbtree_type*)regional_alloc_zero(
 			z->region, sizeof(*z->override_tree));
 		if(!z->override_tree) {
 			lock_rw_unlock(&z->lock);
@@ -745,11 +746,14 @@ add_as112_default(struct local_zones* zones, struct config_file* cfg,
 }
 
 /** enter default zones */
-static int
-lz_enter_defaults(struct local_zones* zones, struct config_file* cfg)
+int local_zone_enter_defaults(struct local_zones* zones, struct config_file* cfg)
 {
 	struct local_zone* z;
 	const char** zstr;
+
+	/* Do not add any default */
+	if(cfg->local_zones_disable_default)
+		return 1;
 
 	/* this list of zones is from RFC 6303 and RFC 7686 */
 
@@ -1020,7 +1024,7 @@ local_zones_apply_cfg(struct local_zones* zones, struct config_file* cfg)
 		return 0;
 	}
 	/* apply default zones+content (unless disabled, or overridden) */
-	if(!lz_enter_defaults(zones, cfg)) {
+	if(!local_zone_enter_defaults(zones, cfg)) {
 		return 0;
 	}
 	/* enter local zone overrides */
@@ -1060,7 +1064,7 @@ local_zones_tags_lookup(struct local_zones* zones,
         uint8_t* name, size_t len, int labs, uint16_t dclass,
 	uint8_t* taglist, size_t taglen, int ignoretags)
 {
-	rbnode_t* res = NULL;
+	rbnode_type* res = NULL;
 	struct local_zone *result;
 	struct local_zone key;
 	int m;
@@ -1214,10 +1218,29 @@ local_encode(struct query_info* qinfo, struct module_env* env,
 	return 1;
 }
 
+/** encode local error answer */
+static void
+local_error_encode(struct query_info* qinfo, struct module_env* env,
+	struct edns_data* edns, sldns_buffer* buf, struct regional* temp,
+	int rcode, int r)
+{
+	edns->edns_version = EDNS_ADVERTISED_VERSION;
+	edns->udp_size = EDNS_ADVERTISED_SIZE;
+	edns->ext_rcode = 0;
+	edns->bits &= EDNS_DO;
+
+	if(!inplace_cb_reply_local_call(env, qinfo, NULL, NULL,
+		rcode, edns, temp))
+		edns->opt_list = NULL;
+	error_encode(buf, r, qinfo, *(uint16_t*)sldns_buffer_begin(buf),
+		sldns_buffer_read_u16_at(buf, 2), edns);
+}
+
 /** find local data tag string match for the given type in the list */
-static int
-find_tag_datas(struct query_info* qinfo, struct config_strlist* list,
-	struct ub_packed_rrset_key* r, struct regional* temp)
+int
+local_data_find_tag_datas(const struct query_info* qinfo,
+	struct config_strlist* list, struct ub_packed_rrset_key* r,
+	struct regional* temp)
 {
 	struct config_strlist* p;
 	char buf[65536];
@@ -1294,13 +1317,24 @@ find_tag_datas(struct query_info* qinfo, struct config_strlist* list,
 			sldns_wirerr_get_rdatawl(rr, len, 1),
 			d->rr_len[d->count]);
 		if(!d->rr_data[d->count])
-			if(!d) return 0; /* out of memory */
+			return 0; /* out of memory */
 		d->count++;
 	}
+	if(r->rk.dname)
+		return 1;
+	return 0;
+}
+
+static int
+find_tag_datas(struct query_info* qinfo, struct config_strlist* list,
+	struct ub_packed_rrset_key* r, struct regional* temp)
+{
+	int result = local_data_find_tag_datas(qinfo, list, r, temp);
+
 	/* If we've found a non-exact alias type of local data, make a shallow
 	 * copy of the RRset and remember it in qinfo to complete the alias
 	 * chain later. */
-	if(r->rk.dname && qinfo->qtype != LDNS_RR_TYPE_CNAME &&
+	if(result && qinfo->qtype != LDNS_RR_TYPE_CNAME &&
 		r->rk.type == htons(LDNS_RR_TYPE_CNAME)) {
 		qinfo->local_alias =
 			regional_alloc_zero(temp, sizeof(struct local_rrset));
@@ -1311,9 +1345,7 @@ find_tag_datas(struct query_info* qinfo, struct config_strlist* list,
 		if(!qinfo->local_alias->rrset)
 			return 0; /* out of memory */
 	}
-	if(r->rk.dname)
-		return 1;
-	return 0;
+	return result;
 }
 
 /** answer local data match */
@@ -1414,9 +1446,8 @@ lz_zone_answer(struct local_zone* z, struct module_env* env,
 		return 1;
 	} else if(lz_type == local_zone_refuse
 		|| lz_type == local_zone_always_refuse) {
-		error_encode(buf, (LDNS_RCODE_REFUSED|BIT_AA), qinfo,
-			*(uint16_t*)sldns_buffer_begin(buf),
-		       sldns_buffer_read_u16_at(buf, 2), edns);
+		local_error_encode(qinfo, env, edns, buf, temp,
+			LDNS_RCODE_REFUSED, (LDNS_RCODE_REFUSED|BIT_AA));
 		return 1;
 	} else if(lz_type == local_zone_static ||
 		lz_type == local_zone_redirect ||
@@ -1433,9 +1464,8 @@ lz_zone_answer(struct local_zone* z, struct module_env* env,
 		if(z->soa)
 			return local_encode(qinfo, env, edns, buf, temp, 
 				z->soa, 0, rcode);
-		error_encode(buf, (rcode|BIT_AA), qinfo, 
-			*(uint16_t*)sldns_buffer_begin(buf), 
-			sldns_buffer_read_u16_at(buf, 2), edns);
+		local_error_encode(qinfo, env, edns, buf, temp, rcode,
+			(rcode|BIT_AA));
 		return 1;
 	} else if(lz_type == local_zone_typetransparent
 		|| lz_type == local_zone_always_transparent) {
@@ -1451,9 +1481,8 @@ lz_zone_answer(struct local_zone* z, struct module_env* env,
 		if(z->soa)
 			return local_encode(qinfo, env, edns, buf, temp, 
 				z->soa, 0, rcode);
-		error_encode(buf, (rcode|BIT_AA), qinfo, 
-			*(uint16_t*)sldns_buffer_begin(buf), 
-			sldns_buffer_read_u16_at(buf, 2), edns);
+		local_error_encode(qinfo, env, edns, buf, temp, rcode,
+			(rcode|BIT_AA));
 		return 1;
 	}
 
@@ -1479,11 +1508,9 @@ lz_inform_print(struct local_zone* z, struct query_info* qinfo,
 static enum localzone_type
 lz_type(uint8_t *taglist, size_t taglen, uint8_t *taglist2, size_t taglen2,
 	uint8_t *tagactions, size_t tagactionssize, enum localzone_type lzt,
-	struct comm_reply* repinfo, struct rbtree_t* override_tree, int* tag,
-	char** tagname, int num_tags)
+	struct comm_reply* repinfo, struct rbtree_type* override_tree,
+	int* tag, char** tagname, int num_tags)
 {
-	size_t i, j;
-	uint8_t tagmatch;
 	struct local_zone_override* lzo;	
 	if(repinfo && override_tree) {
 		lzo = (struct local_zone_override*)addr_tree_lookup(
@@ -1496,6 +1523,19 @@ lz_type(uint8_t *taglist, size_t taglen, uint8_t *taglist2, size_t taglen2,
 	}
 	if(!taglist || !taglist2)
 		return lzt;
+	return local_data_find_tag_action(taglist, taglen, taglist2, taglen2,
+		tagactions, tagactionssize, lzt, tag, tagname, num_tags);
+}
+
+enum localzone_type
+local_data_find_tag_action(const uint8_t* taglist, size_t taglen,
+	const uint8_t* taglist2, size_t taglen2, const uint8_t* tagactions,
+	size_t tagactionssize, enum localzone_type lzt, int* tag,
+	char* const* tagname, int num_tags)
+{
+	size_t i, j;
+	uint8_t tagmatch;
+
 	for(i=0; i<taglen && i<taglen2; i++) {
 		tagmatch = (taglist[i] & taglist2[i]);
 		for(j=0; j<8 && tagmatch>0; j++) {
@@ -1550,7 +1590,7 @@ local_zones_answer(struct local_zones* zones, struct module_env* env,
 			lock_rw_rdlock(&z->lock);
 			lzt = z->type;
 		}
-		if(!z && !view->isfirst){
+		if(view->local_zones && !z && !view->isfirst){
 			lock_rw_unlock(&view->lock);
 			return 0;
 		}
@@ -1635,6 +1675,8 @@ int local_zone_str2type(const char* type, enum localzone_type* t)
 		*t = local_zone_always_refuse;
 	else if(strcmp(type, "always_nxdomain") == 0)
 		*t = local_zone_always_nxdomain;
+	else if(strcmp(type, "nodefault") == 0)
+		*t = local_zone_nodefault;
 	else return 0;
 	return 1;
 }
