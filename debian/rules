@@ -39,6 +39,7 @@ ifneq (,$(filter unbound unbound-anchor unbound-host,$(DOPACKAGES)))
 		--with-libevent \
 		--with-pythonmodule \
 		--enable-dnstap \
+		--enable-systemd \
 		--with-dnstap-socket-path=/run/dnstap.sock \
 		--libdir=/usr/lib \
 		$(CONFIGURE_ARGS)
