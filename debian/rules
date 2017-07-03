@@ -58,6 +58,7 @@ endif
 		--without-libevent \
 		--without-pythonmodule \
 		--without-pyunbound \
+		--enable-event-api \
 		$(CONFIGURE_ARGS)
 	$(MAKE)
 	$(MAKE) install DESTDIR="$(CURDIR)/debian/tmp-lib"
