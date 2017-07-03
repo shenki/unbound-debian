@@ -1,3 +1,30 @@
+unbound (1.6.4-1) unstable; urgency=medium
+
+  [ Robert Edmonds ]
+  * New upstream version 1.6.4
+    - Fixes 'malformed packet DoS when "use-caps-for-id" enabled'
+      (Closes: #864730)
+  * debian/copyright: Use https form of the copyright-format URL
+  * debian/copyright: Bump NLnet Labs copyright years through 2017
+  * debian/control: Bump Standards-Version to 4.0.0
+  * debian/: Enable systemd support
+  * debian/unbound.service: Use Type=notify process start-up type
+    (Closes: #866804)
+  * debian/: Enable experimental pluggable event base libunbound API
+    (Closes: #859584)
+  * debian/control: Add Depends on lsb-base to satisfy lintian's
+    "init.d-script-needs-depends-on-lsb-base"
+
+  [ Steve Langasek ]
+  * debian/control: Build-Depend on python '-dev' packages, not '-all-dev'
+    (Closes: #864334, #866770)
+
+  [ Steven Chamberlain ]
+  * Allow use of libbsd functions with configure option --with-libbsd
+  * debian/: Configure with --with-libbsd (Closes: #853751)
+
+ -- Robert Edmonds <edmonds@debian.org>  Mon, 03 Jul 2017 16:30:17 -0400
+
 unbound (1.6.0-3) unstable; urgency=medium
 
   * Cherry-pick upstream commit svn r4000, "Include root trust anchor id
