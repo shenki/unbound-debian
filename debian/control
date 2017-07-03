@@ -29,7 +29,7 @@ Build-Depends:
  python3-all-dev:any <!pkg.unbound.libonly>,
  libpython3-all-dev <!pkg.unbound.libonly>,
  swig <!pkg.unbound.libonly>,
-Standards-Version: 3.9.8
+Standards-Version: 4.0.0
 Homepage: https://www.unbound.net/
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-dns/unbound.git
 Vcs-Git: https://anonscm.debian.org/git/pkg-dns/unbound.git
