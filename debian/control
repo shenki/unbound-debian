@@ -99,6 +99,7 @@ Architecture: any
 Depends:
  adduser,
  dns-root-data,
+ lsb-base (>= 3.0-6),
  openssl,
  unbound-anchor,
  ${misc:Depends},
