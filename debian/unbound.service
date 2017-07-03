@@ -6,7 +6,7 @@ Before=nss-lookup.target
 Wants=nss-lookup.target
 
 [Service]
-Type=simple
+Type=notify
 Restart=on-failure
 EnvironmentFile=-/etc/default/unbound
 ExecStartPre=-/usr/lib/unbound/package-helper chroot_setup
