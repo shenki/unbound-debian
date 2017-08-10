@@ -59,7 +59,7 @@ endif
 		--with-libunbound-only \
 		--with-nettle \
 		--with-rootkey-file=/var/lib/unbound/root.key \
-		--without-libevent \
+		--with-libevent \
 		--without-pythonmodule \
 		--without-pyunbound \
 		--enable-event-api \
