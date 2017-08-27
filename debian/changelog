@@ -1,3 +1,14 @@
+unbound (1.6.0-3+deb9u1) stretch; urgency=high
+
+  * Cherry-pick upstream commit svn r4301, "Fix install of trust anchor
+    when two anchors are present, makes both valid.  Checks hash of DS but
+    not signature of new key.  This fixes installs between sep11 and oct11
+    2017."
+  * debian/control: unbound: Add versioned dependency on dns-root-data (>=
+    2017072601~) for KSK-2017 in RFC 5011 state VALID.
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 27 Aug 2017 00:43:42 -0400
+
 unbound (1.6.0-3) unstable; urgency=medium
 
   * Cherry-pick upstream commit svn r4000, "Include root trust anchor id
