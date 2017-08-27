@@ -96,7 +96,7 @@ Package: unbound
 Architecture: any
 Depends:
  adduser,
- dns-root-data,
+ dns-root-data (>= 2017072601~),
  openssl,
  unbound-anchor,
  ${misc:Depends},
