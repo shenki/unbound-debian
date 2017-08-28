@@ -1,3 +1,14 @@
+unbound (1.4.22-3+deb8u3) jessie; urgency=high
+
+  * Cherry-pick upstream commit svn r4301, "Fix install of trust anchor
+    when two anchors are present, makes both valid.  Checks hash of DS but
+    not signature of new key.  This fixes installs between sep11 and oct11
+    2017."
+  * Cherry-pick upstream commit svn r4000, "Include root trust anchor id
+    20326 in unbound-anchor".
+
+ -- Robert Edmonds <edmonds@debian.org>  Mon, 28 Aug 2017 00:17:29 -0400
+
 unbound (1.4.22-3+deb8u2) jessie; urgency=medium
 
   * debian/unbound.init: Add "pidfile" magic comment (Closes: #807132)
