@@ -16,7 +16,7 @@ DOPACKAGES = $(shell dh_listpackages)
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
-include /usr/share/dpkg/buildflags.mk
+include /usr/share/dpkg/default.mk
 
 clean:
 	dh_autotools-dev_restoreconfig
