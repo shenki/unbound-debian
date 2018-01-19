@@ -490,7 +490,8 @@ validate_msg_signatures(struct module_qstate* qstate, struct module_env* env,
 		}
 
 		/* Verify the answer rrset */
-		sec = val_verify_rrset_entry(env, ve, s, key_entry, &reason);
+		sec = val_verify_rrset_entry(env, ve, s, key_entry, &reason,
+			LDNS_SECTION_ANSWER, qstate);
 		/* If the (answer) rrset failed to validate, then this 
 		 * message is BAD. */
 		if(sec != sec_status_secure) {
@@ -519,7 +520,8 @@ validate_msg_signatures(struct module_qstate* qstate, struct module_env* env,
 	for(i=chase_reply->an_numrrsets; i<chase_reply->an_numrrsets+
 		chase_reply->ns_numrrsets; i++) {
 		s = chase_reply->rrsets[i];
-		sec = val_verify_rrset_entry(env, ve, s, key_entry, &reason);
+		sec = val_verify_rrset_entry(env, ve, s, key_entry, &reason,
+			LDNS_SECTION_AUTHORITY, qstate);
 		/* If anything in the authority section fails to be secure, 
 		 * we have a bad message. */
 		if(sec != sec_status_secure) {
@@ -545,7 +547,7 @@ validate_msg_signatures(struct module_qstate* qstate, struct module_env* env,
 		val_find_rrset_signer(s, &sname, &slen);
 		if(sname && query_dname_compare(sname, key_entry->name)==0)
 			(void)val_verify_rrset_entry(env, ve, s, key_entry,
-				&reason);
+				&reason, LDNS_SECTION_ADDITIONAL, qstate);
 		/* the additional section can fail to be secure, 
 		 * it is optional, check signature in case we need
 		 * to clean the additional section later. */
@@ -2389,7 +2391,7 @@ primeResponseToKE(struct ub_packed_rrset_key* dnskey_rrset,
 	/* attempt to verify with trust anchor DS and DNSKEY */
 	kkey = val_verify_new_DNSKEYs_with_ta(qstate->region, qstate->env, ve, 
 		dnskey_rrset, ta->ds_rrset, ta->dnskey_rrset, downprot,
-		&reason);
+		&reason, qstate);
 	if(!kkey) {
 		log_err("out of memory: verifying prime TA");
 		return NULL;
@@ -2479,7 +2481,7 @@ ds_response_to_ke(struct module_qstate* qstate, struct val_qstate* vq,
 		/* Verify only returns BOGUS or SECURE. If the rrset is 
 		 * bogus, then we are done. */
 		sec = val_verify_rrset_entry(qstate->env, ve, ds, 
-			vq->key_entry, &reason);
+			vq->key_entry, &reason, LDNS_SECTION_ANSWER, qstate);
 		if(sec != sec_status_secure) {
 			verbose(VERB_DETAIL, "DS rrset in DS response did "
 				"not verify");
@@ -2526,7 +2528,7 @@ ds_response_to_ke(struct module_qstate* qstate, struct val_qstate* vq,
 		/* Try to prove absence of the DS with NSEC */
 		sec = val_nsec_prove_nodata_dsreply(
 			qstate->env, ve, qinfo, msg->rep, vq->key_entry, 
-			&proof_ttl, &reason);
+			&proof_ttl, &reason, qstate);
 		switch(sec) {
 			case sec_status_secure:
 				verbose(VERB_DETAIL, "NSEC RRset for the "
@@ -2554,7 +2556,8 @@ ds_response_to_ke(struct module_qstate* qstate, struct val_qstate* vq,
 
 		sec = nsec3_prove_nods(qstate->env, ve, 
 			msg->rep->rrsets + msg->rep->an_numrrsets,
-			msg->rep->ns_numrrsets, qinfo, vq->key_entry, &reason);
+			msg->rep->ns_numrrsets, qinfo, vq->key_entry, &reason,
+			qstate);
 		switch(sec) {
 			case sec_status_insecure:
 				/* case insecure also continues to unsigned
@@ -2615,7 +2618,7 @@ ds_response_to_ke(struct module_qstate* qstate, struct val_qstate* vq,
 			goto return_bogus;
 		}
 		sec = val_verify_rrset_entry(qstate->env, ve, cname, 
-			vq->key_entry, &reason);
+			vq->key_entry, &reason, LDNS_SECTION_ANSWER, qstate);
 		if(sec == sec_status_secure) {
 			verbose(VERB_ALGO, "CNAME validated, "
 				"proof that DS does not exist");
@@ -2781,7 +2784,7 @@ process_dnskey_response(struct module_qstate* qstate, struct val_qstate* vq,
 	}
 	downprot = qstate->env->cfg->harden_algo_downgrade;
 	vq->key_entry = val_verify_new_DNSKEYs(qstate->region, qstate->env,
-		ve, dnskey, vq->ds_rrset, downprot, &reason);
+		ve, dnskey, vq->ds_rrset, downprot, &reason, qstate);
 
 	if(!vq->key_entry) {
 		log_err("out of memory in verify new DNSKEYs");
@@ -2856,7 +2859,8 @@ process_prime_response(struct module_qstate* qstate, struct val_qstate* vq,
 			ta->dclass);
 	}
 	if(ta->autr) {
-		if(!autr_process_prime(qstate->env, ve, ta, dnskey_rrset)) {
+		if(!autr_process_prime(qstate->env, ve, ta, dnskey_rrset,
+			qstate)) {
 			/* trust anchor revoked, restart with less anchors */
 			vq->state = VAL_INIT_STATE;
 			vq->trust_anchor_name = NULL;
