@@ -1,3 +1,12 @@
+unbound (1.6.0-3+deb9u2) stretch; urgency=high
+
+  * Cherry-pick upstream commit svn r4441, "patch for CVE-2017-15105:
+    vulnerability in the processing of wildcard synthesized NSEC records."
+  * Cherry-pick upstream commit svn r4528, "Added tests with wildcard
+    expanded NSEC records (CVE-2017-15105 test)".
+
+ -- Robert Edmonds <edmonds@debian.org>  Wed, 28 Feb 2018 17:00:51 -0500
+
 unbound (1.6.0-3+deb9u1) stretch; urgency=high
 
   * Cherry-pick upstream commit svn r4301, "Fix install of trust anchor
