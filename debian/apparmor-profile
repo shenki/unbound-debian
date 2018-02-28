@@ -7,8 +7,11 @@
   #include <abstractions/nameservice>
   #include <abstractions/openssl>
 
-  # needlessly chown'ing the PID
-  deny capability chown,
+  # chown the PID/Unix control socket
+  capability chown,
+  # chmod the Unix control socket
+  capability fowner,
+  capability fsetid,
 
   capability net_bind_service,
   capability setgid,
