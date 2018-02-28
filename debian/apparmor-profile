@@ -2,7 +2,7 @@
 # vim:syntax=apparmor
 #include <tunables/global>
 
-/usr/sbin/unbound {
+/usr/sbin/unbound flags=(attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/nameservice>
   #include <abstractions/openssl>
