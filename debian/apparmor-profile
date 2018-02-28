@@ -22,9 +22,6 @@
   capability sys_chroot,
   capability sys_resource,
 
-  # root trust anchor
-  owner /var/lib/unbound/root.key* rw,
-
   # root hints from dns-data-root
   /usr/share/dns/root.* r,
 
@@ -36,7 +33,7 @@
 
   # chrooted paths
   /var/lib/unbound/** r,
-  owner /var/lib/unbound/**/*.key* rw,
+  owner /var/lib/unbound/** rw,
   audit deny /var/lib/unbound/**/unbound_control.{key,pem} rw,
   audit deny /var/lib/unbound/**/unbound_server.key w,
 
