@@ -13,6 +13,9 @@
   capability fowner,
   capability fsetid,
 
+  # added to abstractions/nameservices in Apparmor 2.12
+  /var/lib/sss/mc/initgroups r,
+
   capability net_bind_service,
   capability setgid,
   capability setuid,
