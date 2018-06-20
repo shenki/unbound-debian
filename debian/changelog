@@ -1,3 +1,14 @@
+unbound (1.7.2-1) unstable; urgency=medium
+
+  [ Robert Edmonds ]
+  * New upstream version 1.7.2
+  * debian/control: Update Maintainer field (Closes: #899758)
+
+  [ Vincent Bernat ]
+  * daemon/daemon.c: Fix reload hangs with systemd (Closes: #892914)
+
+ -- Robert Edmonds <edmonds@debian.org>  Wed, 20 Jun 2018 17:30:34 -0400
+
 unbound (1.7.1-1) unstable; urgency=medium
 
   [ Robert Edmonds ]
