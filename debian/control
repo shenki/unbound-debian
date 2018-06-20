@@ -1,7 +1,7 @@
 Source: unbound
 Section: net
 Priority: optional
-Maintainer: Debian DNS Packaging <pkg-dns-devel@lists.alioth.debian.org>
+Maintainer: unbound packagers <unbound@packages.debian.org>
 Uploaders:
  Robert Edmonds <edmonds@debian.org>,
 Build-Depends:
