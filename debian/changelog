@@ -1,3 +1,11 @@
+unbound (1.7.3-1) unstable; urgency=medium
+
+  * New upstream version 1.7.3
+    - Don't count CNAME response types received during qname minimisation as
+      query restart. (Closes: #900800)
+
+ -- Robert Edmonds <edmonds@debian.org>  Thu, 21 Jun 2018 12:45:09 -0400
+
 unbound (1.7.2-1) unstable; urgency=medium
 
   [ Robert Edmonds ]
