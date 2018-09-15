@@ -39,7 +39,7 @@ Package: libunbound-dev
 Section: libdevel
 Architecture: any
 Depends:
- libunbound2 (= ${binary:Version}),
+ libunbound8 (= ${binary:Version}),
  ${misc:Depends},
 Multi-Arch: same
 Description: static library, header files, and docs for libunbound
@@ -49,7 +49,7 @@ Description: static library, header files, and docs for libunbound
  hostnames to IP addresses and back and obtain other information from the
  DNS. Cryptographic validation of results is performed with DNSSEC.
 
-Package: libunbound2
+Package: libunbound8
 Section: libs
 Architecture: any
 Depends:
