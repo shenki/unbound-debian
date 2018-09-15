@@ -11,7 +11,7 @@ ifneq ($(DEB_HOST_ARCH_OS), linux)
 CONFIGURE_ARGS = --with-libbsd
 endif
 
-LIBRARY = libunbound2
+LIBRARY = libunbound8
 DOPACKAGES = $(shell dh_listpackages)
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
