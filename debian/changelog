@@ -1,3 +1,13 @@
+unbound (1.8.0-1) unstable; urgency=medium
+
+  * New upstream version 1.8.0
+  * debian/: libunbound2.symbols → libunbound8.symbols
+  * debian/rules: libunbound2 → libunbound8
+  * debian/control: libunbound2 → libunbound8
+  * daemon/daemon.c: Fix systemd service manager state change notification
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 15 Sep 2018 16:21:11 -0400
+
 unbound (1.7.3-1) unstable; urgency=medium
 
   * New upstream version 1.7.3
