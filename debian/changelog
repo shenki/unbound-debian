@@ -1,3 +1,9 @@
+unbound (1.8.1-1) unstable; urgency=medium
+
+  * New upstream version 1.8.1
+
+ -- Robert Edmonds <edmonds@debian.org>  Thu, 08 Nov 2018 16:50:36 -0500
+
 unbound (1.8.0-1) unstable; urgency=medium
 
   * New upstream version 1.8.0
