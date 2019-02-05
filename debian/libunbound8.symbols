@@ -21,6 +21,7 @@ libunbound.so.8 libunbound8 #MINVER#
  ub_ctx_set_fwd@Base 1.8.0
  ub_ctx_set_option@Base 1.8.0
  ub_ctx_set_stub@Base 1.8.0
+ ub_ctx_set_tls@Base 1.9.0
  ub_ctx_trustedkeys@Base 1.8.0
  ub_ctx_zone_add@Base 1.8.0
  ub_ctx_zone_remove@Base 1.8.0
