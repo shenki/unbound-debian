@@ -1,3 +1,12 @@
+unbound (1.9.0-1) unstable; urgency=medium
+
+  * New upstream version 1.9.0
+  * Team upload
+  * Include dpkg/default.mk instead of only buildflags.mk
+  * Update d/watch to reflect new download location and add signature check
+
+ -- Ondřej Surý <ondrej@debian.org>  Tue, 05 Feb 2019 09:49:04 +0000
+
 unbound (1.8.1-1) unstable; urgency=medium
 
   * New upstream version 1.8.1
