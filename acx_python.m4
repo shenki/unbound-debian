@@ -42,12 +42,7 @@ $ac_distutils_result])
                 if test -n "${python_path}"; then
                         python_path="-I$python_path"
                 fi
-                python_multiarch_path=`$PYTHON -c "import distutils.sysconfig; \
-                        print(distutils.sysconfig.get_python_inc(plat_specific=1));"`
-                if test -n "${python_multiarch_path}"; then
-                        python_multiarch_path="-I$python_multiarch_path"
-                fi
-                PYTHON_CPPFLAGS="$python_path $python_multiarch_path"
+                PYTHON_CPPFLAGS=$python_path
         fi
         AC_MSG_RESULT([$PYTHON_CPPFLAGS])
         AC_SUBST([PYTHON_CPPFLAGS])
