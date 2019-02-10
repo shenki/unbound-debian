@@ -1,3 +1,10 @@
+unbound (1.9.0-2) unstable; urgency=medium
+
+  [ Simon Deziel ]
+  * Disable chroot'ing (Closes: #921538)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 09 Feb 2019 21:10:52 -0500
+
 unbound (1.9.0-1) unstable; urgency=medium
 
   * New upstream version 1.9.0
