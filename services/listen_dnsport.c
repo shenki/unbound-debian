@@ -851,13 +851,16 @@ create_tcp_accept_sock(struct addrinfo *addr, int v6only, int* noproto,
 #ifdef ENOPROTOOPT
 		/* squelch ENOPROTOOPT: freebsd server mode with kernel support
 		   disabled, except when verbosity enabled for debugging */
-		if(errno != ENOPROTOOPT || verbosity >= 3)
+		if(errno != ENOPROTOOPT || verbosity >= 3) {
 #endif
 		  if(errno == EPERM) {
 		  	log_warn("Setting TCP Fast Open as server failed: %s ; this could likely be because sysctl net.inet.tcp.fastopen.enabled, net.inet.tcp.fastopen.server_enable, or net.ipv4.tcp_fastopen is disabled", strerror(errno));
 		  } else {
 		  	log_err("Setting TCP Fast Open as server failed: %s", strerror(errno));
 		  }
+#ifdef ENOPROTOOPT
+		}
+#endif
 	}
 #endif
 	return s;
@@ -1636,10 +1639,12 @@ tcp_req_info_setup_listen(struct tcp_req_info* req)
 	
 	if(wr) {
 		req->cp->tcp_is_reading = 0;
+		comm_point_stop_listening(req->cp);
 		comm_point_start_listening(req->cp, -1,
 			req->cp->tcp_timeout_msec);
 	} else if(rd) {
 		req->cp->tcp_is_reading = 1;
+		comm_point_stop_listening(req->cp);
 		comm_point_start_listening(req->cp, -1,
 			req->cp->tcp_timeout_msec);
 		/* and also read it (from SSL stack buffers), so
@@ -1647,6 +1652,7 @@ tcp_req_info_setup_listen(struct tcp_req_info* req)
 		 * the TLS frame is sitting in the buffers. */
 		req->read_again = 1;
 	} else {
+		comm_point_stop_listening(req->cp);
 		comm_point_start_listening(req->cp, -1,
 			req->cp->tcp_timeout_msec);
 		comm_point_listen_for_rw(req->cp, 0, 0);
@@ -1746,6 +1752,7 @@ tcp_req_info_handle_readdone(struct tcp_req_info* req)
 	req->is_drop = 0;
 	req->is_reply = 0;
 	req->in_worker_handle = 1;
+	sldns_buffer_set_limit(req->spool_buffer, 0);
 	/* handle the current request */
 	/* this calls the worker handle request routine that could give
 	 * a cache response, or localdata response, or drop the reply,
@@ -1759,6 +1766,7 @@ tcp_req_info_handle_readdone(struct tcp_req_info* req)
 		 * clear to write to */
 	send_it:
 		c->tcp_is_reading = 0;
+		comm_point_stop_listening(c);
 		comm_point_start_listening(c, -1, c->tcp_timeout_msec);
 		return;
 	}
@@ -1767,13 +1775,7 @@ tcp_req_info_handle_readdone(struct tcp_req_info* req)
 	 * If mesh failed to add a new entry and called commpoint_drop_reply. 
 	 * Then the mesh state has been cleared. */
 	if(req->is_drop) {
-		/* we can now call drop_reply without recursing into ourselves
-		 * whilst in the callback */
-		/* we have to close the stream because there is no reply,
-		 * no servfail to send, but the query needs an action, for
-		 * a stream that is close the connection */
-		sldns_buffer_clear(c->buffer);
-		comm_point_drop_reply(&c->repinfo);
+		/* the reply has been dropped, stream has been closed. */
 		return;
 	}
 	/* If mesh failed(mallocfail) and called commpoint_send_reply with
@@ -1857,7 +1859,14 @@ void
 tcp_req_info_send_reply(struct tcp_req_info* req)
 {
 	if(req->in_worker_handle) {
-		/* It is in the right buffer to answer straight away */
+		/* reply from mesh is in the spool_buffer */
+		/* copy now, so that the spool buffer is free for other tasks
+		 * before the callback is done */
+		sldns_buffer_clear(req->cp->buffer);
+		sldns_buffer_write(req->cp->buffer,
+			sldns_buffer_begin(req->spool_buffer),
+			sldns_buffer_limit(req->spool_buffer));
+		sldns_buffer_flip(req->cp->buffer);
 		req->is_reply = 1;
 		return;
 	}
