@@ -1,3 +1,10 @@
+unbound (1.9.3~rc1-1) experimental; urgency=medium
+
+  * New upstream version 1.9.3~rc1
+  * debian/control: Bump Standards-Version to 4.4.0 (no changes)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 17 Aug 2019 18:01:56 -0400
+
 unbound (1.9.0-2) unstable; urgency=medium
 
   [ Simon Deziel ]
