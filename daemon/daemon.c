@@ -575,6 +575,9 @@ void
 daemon_fork(struct daemon* daemon)
 {
 	int have_view_respip_cfg = 0;
+#ifdef HAVE_SYSTEMD
+	int ret;
+#endif
 
 	log_assert(daemon);
 	if(!(daemon->views = views_create()))
@@ -660,7 +663,12 @@ daemon_fork(struct daemon* daemon)
 
 	/* Start resolver service on main thread. */
 #ifdef HAVE_SYSTEMD
-	sd_notify(0, "READY=1");
+	ret = sd_notify(0, "READY=1");
+	if(ret <= 0 && getenv("NOTIFY_SOCKET"))
+		fatal_exit("sd_notify failed %s: %s. Make sure that unbound has "
+				"access/permission to use the socket presented by systemd.",
+				getenv("NOTIFY_SOCKET"),
+				(ret==0?"no $NOTIFY_SOCKET": strerror(-ret)));
 #endif
 	log_info("start of service (%s).", PACKAGE_STRING);
 	worker_work(daemon->workers[0]);
@@ -770,7 +778,7 @@ daemon_delete(struct daemon* daemon)
 #  endif
 #  ifdef HAVE_OPENSSL_CONFIG
 	EVP_cleanup();
-#  if OPENSSL_VERSION_NUMBER < 0x10100000
+#  if (OPENSSL_VERSION_NUMBER < 0x10100000) && !defined(OPENSSL_NO_ENGINE)
 	ENGINE_cleanup();
 #  endif
 	CONF_modules_free();

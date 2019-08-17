@@ -11,14 +11,14 @@ sinclude(dnscrypt/dnscrypt.m4)
 # must be numbers. ac_defun because of later processing
 m4_define([VERSION_MAJOR],[1])
 m4_define([VERSION_MINOR],[9])
-m4_define([VERSION_MICRO],[0])
-AC_INIT(unbound, m4_defn([VERSION_MAJOR]).m4_defn([VERSION_MINOR]).m4_defn([VERSION_MICRO]), unbound-bugs@nlnetlabs.nl, unbound)
+m4_define([VERSION_MICRO],[3rc1])
+AC_INIT(unbound, m4_defn([VERSION_MAJOR]).m4_defn([VERSION_MINOR]).m4_defn([VERSION_MICRO]), unbound-bugs@nlnetlabs.nl or https://github.com/NLnetLabs/unbound/issues, unbound)
 AC_SUBST(UNBOUND_VERSION_MAJOR, [VERSION_MAJOR])
 AC_SUBST(UNBOUND_VERSION_MINOR, [VERSION_MINOR])
 AC_SUBST(UNBOUND_VERSION_MICRO, [VERSION_MICRO])
 
 LIBUNBOUND_CURRENT=9
-LIBUNBOUND_REVISION=0
+LIBUNBOUND_REVISION=3
 LIBUNBOUND_AGE=1
 # 1.0.0 had 0:12:0
 # 1.0.1 had 0:13:0
@@ -85,7 +85,10 @@ LIBUNBOUND_AGE=1
 # 1.8.1 had 8:1:0
 # 1.8.2 had 8:2:0
 # 1.8.3 had 8:3:0
-# 1.8.4 had 9:0:1 # add ub_ctx_set_tls
+# 1.9.0 had 9:0:1 # add ub_ctx_set_tls
+# 1.9.1 had 9:1:1
+# 1.9.2 had 9:2:1
+# 1.9.3 had 9:3:1
 
 #   Current  -- the number of the binary API that we're implementing
 #   Revision -- which iteration of the implementation of the binary
@@ -108,6 +111,10 @@ LIBUNBOUND_AGE=1
 AC_SUBST(LIBUNBOUND_CURRENT)
 AC_SUBST(LIBUNBOUND_REVISION)
 AC_SUBST(LIBUNBOUND_AGE)
+
+
+cmdln="`echo $@ | sed -e 's/\\\\/\\\\\\\\/g' | sed -e 's/"/\\\\"/'g`"
+AC_DEFINE_UNQUOTED(CONFCMDLINE, ["$cmdln"], [Command line arguments used with configure])
 
 CFLAGS="$CFLAGS"
 AC_AIX
@@ -382,6 +389,8 @@ AC_CHECK_PROG(doxygen, doxygen, doxygen)
 AC_CHECK_TOOL(STRIP, strip)
 ACX_LIBTOOL_C_ONLY
 
+PKG_PROG_PKG_CONFIG
+
 # Checks for header files.
 AC_CHECK_HEADERS([stdarg.h stdbool.h netinet/in.h netinet/tcp.h sys/param.h sys/socket.h sys/un.h sys/uio.h sys/resource.h arpa/inet.h syslog.h netdb.h sys/wait.h pwd.h glob.h grp.h login_cap.h winsock2.h ws2tcpip.h endian.h sys/endian.h libkern/OSByteOrder.h sys/ipc.h sys/shm.h],,, [AC_INCLUDES_DEFAULT])
 
@@ -641,7 +650,6 @@ if test x_$ub_test_python != x_no; then
         CPPFLAGS="$PYTHON_CPPFLAGS"
       fi
       ub_have_python=yes
-      PKG_PROG_PKG_CONFIG
       PKG_CHECK_EXISTS(["python${PY_MAJOR_VERSION}"],
                        [PC_PY_DEPENDENCY="python${PY_MAJOR_VERSION}"],
                        [PC_PY_DEPENDENCY="python"])
@@ -781,7 +789,7 @@ else
 	AC_MSG_RESULT([no])
 fi
 AC_CHECK_HEADERS([openssl/conf.h openssl/engine.h openssl/bn.h openssl/dh.h openssl/dsa.h openssl/rsa.h],,, [AC_INCLUDES_DEFAULT])
-AC_CHECK_FUNCS([OPENSSL_config EVP_sha1 EVP_sha256 EVP_sha512 FIPS_mode EVP_MD_CTX_new OpenSSL_add_all_digests OPENSSL_init_crypto EVP_cleanup ERR_load_crypto_strings CRYPTO_cleanup_all_ex_data ERR_free_strings RAND_cleanup DSA_SIG_set0 EVP_dss1 EVP_DigestVerify SSL_CTX_set_tlsext_ticket_key_cb EVP_aes_256_cbc EVP_EncryptInit_ex HMAC_Init_ex])
+AC_CHECK_FUNCS([OPENSSL_config EVP_sha1 EVP_sha256 EVP_sha512 FIPS_mode EVP_MD_CTX_new OpenSSL_add_all_digests OPENSSL_init_crypto EVP_cleanup ERR_load_crypto_strings CRYPTO_cleanup_all_ex_data ERR_free_strings RAND_cleanup DSA_SIG_set0 EVP_dss1 EVP_DigestVerify SSL_CTX_set_tlsext_ticket_key_cb EVP_aes_256_cbc EVP_EncryptInit_ex HMAC_Init_ex CRYPTO_THREADID_set_callback])
 
 # these check_funcs need -lssl
 BAKLIBS="$LIBS"
@@ -1197,6 +1205,14 @@ large outgoing port ranges.  ])
 	AC_CHECK_FUNCS([event_base_get_method]) # only in libevent 1.4.3 and later
 	AC_CHECK_FUNCS([ev_loop]) # only in libev. (tested on 3.51)
 	AC_CHECK_FUNCS([ev_default_loop]) # only in libev. (tested on 4.00)
+	AC_CHECK_FUNCS([event_assign]) # in libevent, for thread-safety
+	AC_CHECK_DECLS([evsignal_assign], [], [], [AC_INCLUDES_DEFAULT
+#ifdef HAVE_EVENT_H
+#  include <event.h>
+#else
+#  include "event2/event.h"
+#endif
+	])
         PC_LIBEVENT_DEPENDENCY="libevent"
         AC_SUBST(PC_LIBEVENT_DEPENDENCY)
 	if test -n "$BAK_LDFLAGS_SET"; then
@@ -1436,7 +1452,24 @@ AC_REPLACE_FUNCS(explicit_bzero)
 dnl without CTIME, ARC4-functions and without reallocarray.
 LIBOBJ_WITHOUT_CTIMEARC4="$LIBOBJS"
 AC_SUBST(LIBOBJ_WITHOUT_CTIMEARC4)
-AC_REPLACE_FUNCS(reallocarray)
+AC_MSG_CHECKING([for reallocarray])
+AC_LINK_IFELSE([AC_LANG_SOURCE(AC_INCLUDES_DEFAULT
+[[
+#ifndef _OPENBSD_SOURCE
+#define _OPENBSD_SOURCE 1
+#endif
+#include <stdlib.h>
+int main(void) {
+	void* p = reallocarray(NULL, 10, 100);
+	free(p);
+	return 0;
+}
+]])], [AC_MSG_RESULT(yes)
+	AC_DEFINE(HAVE_REALLOCARRAY, 1, [If we have reallocarray(3)])
+], [
+	AC_MSG_RESULT(no)
+	AC_LIBOBJ(reallocarray)
+])
 if test "$USE_NSS" = "no"; then
 	AC_REPLACE_FUNCS(arc4random)
 	AC_REPLACE_FUNCS(arc4random_uniform)
@@ -1575,6 +1608,47 @@ case "$enable_ipsecmod" in
 		;;
 esac
 
+# check for ipset if requested
+AC_ARG_ENABLE(ipset, AC_HELP_STRING([--enable-ipset], [enable ipset module]))
+case "$enable_ipset" in
+    yes)
+		AC_DEFINE([USE_IPSET], [1], [Define to 1 to use ipset support])
+		IPSET_SRC="ipset/ipset.c"
+		AC_SUBST(IPSET_SRC)
+		IPSET_OBJ="ipset.lo"
+		AC_SUBST(IPSET_OBJ)
+
+		# mnl
+		AC_ARG_WITH(libmnl, AC_HELP_STRING([--with-libmnl=path],
+			[specify explicit path for libmnl.]),
+			[ ],[ withval="yes" ])
+		found_libmnl="no"
+		AC_MSG_CHECKING(for libmnl)
+		if test x_$withval = x_ -o x_$withval = x_yes; then
+			withval="/usr/local /opt/local /usr/lib /usr/pkg /usr/sfw /usr"
+		fi
+		for dir in $withval ; do
+			if test -f "$dir/include/libmnl/libmnl.h"; then
+				found_libmnl="yes"
+				dnl assume /usr is in default path.
+				if test "$dir" != "/usr"; then
+					CPPFLAGS="$CPPFLAGS -I$dir/include"
+					LDFLAGS="$LDFLAGS -L$dir/lib"
+				fi
+				AC_MSG_RESULT(found in $dir)
+				LIBS="$LIBS -lmnl"
+				break;
+			fi
+		done
+		if test x_$found_libmnl != x_yes; then
+			AC_ERROR([Could not find libmnl, libmnl.h])
+		fi
+		;;
+    no|*)
+    	# nothing
+		;;
+esac
+
 AC_MSG_CHECKING([if ${MAKE:-make} supports $< with implicit rule in scope])
 # on openBSD, the implicit rule make $< work.
 # on Solaris, it does not work ($? is changed sources, $^ lists dependencies).
@@ -1649,8 +1723,14 @@ AHX_CONFIG_EXT_FLAGS
 
 dnl includes
 [
+#ifndef _OPENBSD_SOURCE
+#define _OPENBSD_SOURCE 1
+#endif
+
 #ifndef UNBOUND_DEBUG
+# ifndef NDEBUG
 #  define NDEBUG
+# endif
 #endif
 
 /** Use small-ldns codebase */

@@ -744,6 +744,14 @@ listen_sslctx_setup(void* ctxt)
 		return 0;
 	}
 #endif
+#if defined(SSL_OP_NO_RENEGOTIATION)
+	/* disable client renegotiation */
+	if((SSL_CTX_set_options(ctx, SSL_OP_NO_RENEGOTIATION) &
+		SSL_OP_NO_RENEGOTIATION) != SSL_OP_NO_RENEGOTIATION) {
+		log_crypto_err("could not set SSL_OP_NO_RENEGOTIATION");
+		return 0;
+	}
+#endif
 #if defined(SHA256_DIGEST_LENGTH) && defined(USE_ECDSA)
 	/* if we have sha256, set the cipher list to have no known vulns */
 	if(!SSL_CTX_set_cipher_list(ctx, "TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-256-GCM-SHA384:TLS13-AES-128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256"))
@@ -800,6 +808,16 @@ void* listen_sslctx_create(char* key, char* pem, char* verifypem)
 	SSL_CTX* ctx = SSL_CTX_new(SSLv23_server_method());
 	if(!ctx) {
 		log_crypto_err("could not SSL_CTX_new");
+		return NULL;
+	}
+	if(!key || key[0] == 0) {
+		log_err("error: no tls-service-key file specified");
+		SSL_CTX_free(ctx);
+		return NULL;
+	}
+	if(!pem || pem[0] == 0) {
+		log_err("error: no tls-service-pem file specified");
+		SSL_CTX_free(ctx);
 		return NULL;
 	}
 	if(!listen_sslctx_setup(ctx)) {
@@ -952,6 +970,14 @@ void* connect_sslctx_create(char* key, char* pem, char* verifypem, int wincert)
 		SSL_CTX_free(ctx);
 		return NULL;
 	}
+#if defined(SSL_OP_NO_RENEGOTIATION)
+	/* disable client renegotiation */
+	if((SSL_CTX_set_options(ctx, SSL_OP_NO_RENEGOTIATION) &
+		SSL_OP_NO_RENEGOTIATION) != SSL_OP_NO_RENEGOTIATION) {
+		log_crypto_err("could not set SSL_OP_NO_RENEGOTIATION");
+		return 0;
+	}
+#endif
 	if(key && key[0]) {
 		if(!SSL_CTX_use_certificate_chain_file(ctx, pem)) {
 			log_err("error in client certificate %s", pem);
@@ -1049,11 +1075,19 @@ void* outgoing_ssl_fd(void* sslctx, int fd)
 static lock_basic_type *ub_openssl_locks = NULL;
 
 /** callback that gets thread id for openssl */
+#ifdef HAVE_CRYPTO_THREADID_SET_CALLBACK
+static void
+ub_crypto_id_cb(CRYPTO_THREADID *id)
+{
+	CRYPTO_THREADID_set_numeric(id, (unsigned long)log_thread_get());
+}
+#else
 static unsigned long
 ub_crypto_id_cb(void)
 {
 	return (unsigned long)log_thread_get();
 }
+#endif
 
 static void
 ub_crypto_lock_cb(int mode, int type, const char *ATTR_UNUSED(file),
@@ -1078,7 +1112,11 @@ int ub_openssl_lock_init(void)
 	for(i=0; i<CRYPTO_num_locks(); i++) {
 		lock_basic_init(&ub_openssl_locks[i]);
 	}
+#  ifdef HAVE_CRYPTO_THREADID_SET_CALLBACK
+	CRYPTO_THREADID_set_callback(&ub_crypto_id_cb);
+#  else
 	CRYPTO_set_id_callback(&ub_crypto_id_cb);
+#  endif
 	CRYPTO_set_locking_callback(&ub_crypto_lock_cb);
 #endif /* OPENSSL_THREADS */
 	return 1;
@@ -1090,7 +1128,11 @@ void ub_openssl_lock_delete(void)
 	int i;
 	if(!ub_openssl_locks)
 		return;
+#  ifdef HAVE_CRYPTO_THREADID_SET_CALLBACK
+	CRYPTO_THREADID_set_callback(NULL);
+#  else
 	CRYPTO_set_id_callback(NULL);
+#  endif
 	CRYPTO_set_locking_callback(NULL);
 	for(i=0; i<CRYPTO_num_locks(); i++) {
 		lock_basic_destroy(&ub_openssl_locks[i]);
@@ -1219,6 +1261,12 @@ listen_sslctx_delete_ticket_keys(void)
 	struct tls_session_ticket_key *key;
 	if(!ticket_keys) return;
 	for(key = ticket_keys; key->key_name != NULL; key++) {
+		/* wipe key data from memory*/
+#ifdef HAVE_EXPLICIT_BZERO
+		explicit_bzero(key->key_name, 80);
+#else
+		memset(key->key_name, 0xdd, 80);
+#endif
 		free(key->key_name);
 	}
 	free(ticket_keys);
