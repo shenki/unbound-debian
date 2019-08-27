@@ -1,3 +1,25 @@
+22 August 2019: Wouter
+	- Fix that pkg-config is setup before --enable-systemd needs it.
+	- 1.9.3rc2 release candidate tag.
+
+21 August 2019: Wouter
+	- Fix log_dns_msg to log irrespective of minimal responses config.
+
+19 August 2019: Ralph
+	- Document limitation of pidfile removal outside of chroot directory.
+
+16 August 2019: Wouter
+	- Fix unittest valgrind false positive uninitialised value report,
+	  where if gcc 9.1.1 uses -O2 (but not -O1) then valgrind 3.15.0
+	  issues an uninitialised value for the token buffer at the str2wire.c
+	  rrinternal_get_owner() strcmp with the '@' value.  Rewritten to use
+	  straight character comparisons removes the false positive.  Also
+	  valgrinds --expensive-definedness-checks=yes can stop this false
+	  positive.
+	- Please doxygen's parser for "@" occurrence in doxygen comment.
+	- Fixup contrib/fastrpz.patch
+	- Remove warning about unknown cast-function-type warning pragma.
+
 15 August 2019: Wouter
 	- iana portlist updated.
 	- Fix autotrust temp file uniqueness windows compile.
@@ -5,6 +27,7 @@
 	- escape commandline contents for -V.
 	- Fix character buffer size in ub_ctx_hosts.
 	- 1.9.3rc1 release candidate tag.
+	- Option -V prints if TCP fastopen is available.
 
 14 August 2019: George
 	- Fix #59, when compiled with systemd support check that we can properly
