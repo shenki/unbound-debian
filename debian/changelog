@@ -1,3 +1,9 @@
+unbound (1.9.3-1) unstable; urgency=medium
+
+  * New upstream version 1.9.3
+
+ -- Robert Edmonds <edmonds@debian.org>  Tue, 27 Aug 2019 14:24:11 -0400
+
 unbound (1.9.3~rc1-1) experimental; urgency=medium
 
   * New upstream version 1.9.3~rc1
