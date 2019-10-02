@@ -65,7 +65,7 @@ case "$1" in
 
     reload)
         log_daemon_msg "Reloading $DESC" "$NAME"
-        if start-stop-daemon --stop --pidfile $PIDFILE --signal 1; then
+        if start-stop-daemon --stop --pidfile $PIDFILE --name $NAME --signal 1; then
             $HELPER chroot_setup
             log_end_msg 0
         else
