@@ -1,3 +1,11 @@
+unbound (1.9.4-1) unstable; urgency=high
+
+  * New upstream version 1.9.4
+    - Fix CVE-2019-16866: uninitialized memory access when parsing specially
+      crafted NOTIFY query.
+
+ -- Robert Edmonds <edmonds@debian.org>  Fri, 04 Oct 2019 00:43:19 -0400
+
 unbound (1.9.3-1) unstable; urgency=medium
 
   * New upstream version 1.9.3
