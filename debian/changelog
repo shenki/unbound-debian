@@ -1,3 +1,9 @@
+unbound (1.9.0-2+deb10u1) buster-security; urgency=high
+
+  * Apply NLnet Labs patch for CVE-2019-16866 (Closes: #941692)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 12 Oct 2019 20:40:17 -0400
+
 unbound (1.9.0-2) unstable; urgency=medium
 
   [ Simon Deziel ]
