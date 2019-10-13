@@ -1,0 +1,8 @@
+Subject: Collected Debian patches for unbound
+Author: Debian DNS Team <team+dns@tracker.debian.org>
+
+The unbound package is maintained in Git rather than maintaining patches as
+separate files. They are therefore all included in this single Debian patch.
+
+For full commit history and separated commits, see the packaging Git
+repository.
