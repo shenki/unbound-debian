@@ -1,3 +1,10 @@
+unbound (1.9.4-2) unstable; urgency=medium
+
+  * Cherry-pick upstream commit ec021e0d, "fix build with nettle-3.5"
+    (Closes: #941041)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 26 Oct 2019 08:00:58 -0400
+
 unbound (1.9.4-1) unstable; urgency=high
 
   * New upstream version 1.9.4
