@@ -8,7 +8,7 @@ Build-Depends:
  autoconf,
  autotools-dev,
  bison,
- debhelper (>= 9.20160709),
+ debhelper (>= 10~),
  dh-apparmor <!pkg.unbound.libonly>,
  dh-autoreconf,
  dh-python <!pkg.unbound.libonly>,
