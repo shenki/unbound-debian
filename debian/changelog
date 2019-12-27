@@ -675,4 +675,3 @@ unbound (1.0.0-1) unstable; urgency=low
   * Initial release; closes: #482277.
 
  -- Robert S. Edmonds <edmonds@debian.org>  Wed, 21 May 2008 14:13:28 -0400
-
