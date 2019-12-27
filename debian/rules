@@ -19,7 +19,6 @@ DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
 clean:
-	dh_autotools-dev_restoreconfig
 	dh_autoreconf_clean
 	dh clean
 
@@ -30,7 +29,6 @@ build-indep:
 binary-arch: build
 	dh_testdir
 	dh_autoreconf
-	dh_autotools-dev_updateconfig
 
 ifneq (,$(filter unbound unbound-anchor unbound-host,$(DOPACKAGES)))
 	# first build -- build unbound daemon
