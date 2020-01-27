@@ -76,9 +76,6 @@ do_root_trust_anchor_update() {
                     install -m 0644 -o unbound -g unbound "$DNS_ROOT_KEY_FILE" "$ROOT_TRUST_ANCHOR_FILE"
                 fi
             fi
-            env -i LANG="$LANG" PATH="$PATH" start-stop-daemon \
-                --chuid unbound:unbound --start \
-                --exec /usr/sbin/unbound-anchor -- -a "$ROOT_TRUST_ANCHOR_FILE" -v || true
         fi
     fi
 }
