@@ -1,0 +1,27 @@
+From 92624d6f743782638e02159e63cdcf2062a4a48f Mon Sep 17 00:00:00 2001
+From: Robert Edmonds <edmonds@debian.org>
+Date: Sun, 26 Jan 2020 19:45:53 -0500
+Subject: [PATCH] Enable remote-control by default (Closes: #923314)
+
+This change was inadvertently dropped when upstream release 1.9.0 was
+merged in commit 8f6a4880371ffffa45172d1c1099d3880c04fc5d.
+---
+ util/config_file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/util/config_file.c b/util/config_file.c
+index 119b222..0db6ba7 100644
+--- a/util/config_file.c
++++ b/util/config_file.c
+@@ -264,7 +264,7 @@ config_create(void)
+ 	cfg->unblock_lan_zones = 0;
+ 	cfg->insecure_lan_zones = 0;
+ 	cfg->python_script = NULL;
+-	cfg->remote_control_enable = 0;
++	cfg->remote_control_enable = 1; /* Debian specific */
+ 	cfg->control_ifs.first = NULL;
+ 	cfg->control_ifs.last = NULL;
+ 	cfg->control_port = UNBOUND_CONTROL_PORT;
+-- 
+2.25.0
+
