@@ -1,4 +1,5 @@
 libunbound.so.8 libunbound8 #MINVER#
+* Build-Depends-Package: libunbound-dev
  ub_cancel@Base 1.8.0
  ub_ctx_add_ta@Base 1.8.0
  ub_ctx_add_ta_autr@Base 1.8.0
