@@ -1,6 +1,5 @@
 debian/package-helper usr/lib/unbound
 debian/unbound.conf etc/unbound
-debian/unbound.conf.d/qname-minimisation.conf etc/unbound/unbound.conf.d
 debian/unbound.conf.d/root-auto-trust-anchor-file.conf etc/unbound/unbound.conf.d
 usr/sbin/unbound usr/sbin
 usr/sbin/unbound-checkconf usr/sbin
