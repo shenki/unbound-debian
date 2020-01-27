@@ -30,7 +30,7 @@ Build-Depends:
  python3-dev:any <!pkg.unbound.libonly>,
  libpython3-dev <!pkg.unbound.libonly>,
  swig <!pkg.unbound.libonly>,
-Standards-Version: 4.4.0
+Standards-Version: 4.5.0
 Homepage: https://www.unbound.net/
 Vcs-Browser: https://salsa.debian.org/dns-team/unbound
 Vcs-Git: https://salsa.debian.org/dns-team/unbound.git
