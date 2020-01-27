@@ -1,3 +1,41 @@
+unbound (1.9.6-1) unstable; urgency=medium
+
+  [ Robert Edmonds ]
+  * New upstream version 1.9.6 (Closes: #948036)
+    - Fixes 'unbound crashes with "Assertion nread >= 0 failed in
+      evmap_io_del_"' (Closes: #930699)
+    - Fixes "unbound: Fails to answer TCP queries due to broken idle-timeout"
+      (Closes: #946421)
+  * debian/source/options: Remove 'single-debian-patch' option
+  * debian/unbound.service: Change ExecReload to send SIGHUP rather than
+    using unbound-control (Closes: #923314)
+  * Enable remote-control by default (Closes: #923314)
+  * Allow use of libbsd functions with configure option --with-libbsd
+  * Remove "qname-minimisation: yes" config file setting, since this is
+    now the default (Closes: #915056)
+  * debian/package-helper: No longer invoke unbound-anchor for root trust
+    anchor update (Closes: #910675)
+  * debian/control: Bump Standards-Version to 4.5.0 (no changes)
+  * debian/control: Remove build dependencies on autotools-dev, dh-
+    autoreconf
+  * debian/libunbound8.symbols: Add "* Build-Depends-Package: libunbound-
+    dev"
+  * Rename debian/NEWS.Debian -> debian/NEWS
+
+  [ Matthew Palmer ]
+  * Fix insecure use of start-stop-daemon --pidfile (Closes: #941573)
+
+  [ Simon Deziel ]
+  * Install Apparmor profile prior to service startup (Closes: #919511)
+
+  [ Debian Janitor ]
+  * Trim trailing whitespace.
+  * Drop use of autotools-dev debhelper.
+  * Bump debhelper from old 9 to 10.
+  * Set field Upstream-Name in debian/copyright.
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 26 Jan 2020 22:45:45 -0500
+
 unbound (1.9.4-2) unstable; urgency=medium
 
   * Cherry-pick upstream commit ec021e0d, "fix build with nettle-3.5"
