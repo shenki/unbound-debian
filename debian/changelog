@@ -1,3 +1,10 @@
+unbound (1.9.6-2) unstable; urgency=medium
+
+  * debian/unbound.maintscript: Remove obsolete conffile
+    /etc/unbound/unbound.conf.d/qname-minimisation.conf (Closes: #950406)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 01 Feb 2020 14:44:39 -0500
+
 unbound (1.9.6-1) unstable; urgency=medium
 
   [ Robert Edmonds ]
