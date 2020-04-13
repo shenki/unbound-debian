@@ -23,8 +23,6 @@ Build-Depends:
  nettle-dev,
  pkg-config,
  protobuf-c-compiler <!pkg.unbound.libonly>,
- python-dev:any (>= 2.6.6-3~) <!pkg.unbound.libonly>,
- libpython-dev (>= 2.6.6-3~) <!pkg.unbound.libonly>,
  python3-dev:any <!pkg.unbound.libonly>,
  libpython3-dev <!pkg.unbound.libonly>,
  swig <!pkg.unbound.libonly>,
@@ -57,21 +55,6 @@ Pre-Depends:
  ${misc:Pre-Depends},
 Multi-Arch: same
 Description: library implementing DNS resolution and validation
- libunbound performs and validates DNS lookups; it can be used to convert
- hostnames to IP addresses and back and obtain other information from the
- DNS. Cryptographic validation of results is performed with DNSSEC.
-
-Package: python-unbound
-Section: python
-Architecture: any
-Depends:
- ${misc:Depends},
- ${python:Depends},
- ${shlibs:Depends},
-Build-Profiles: <!pkg.unbound.libonly>
-Description: library implementing DNS resolution and validation (Python bindings)
- Python extension module for libunbound.
- .
  libunbound performs and validates DNS lookups; it can be used to convert
  hostnames to IP addresses and back and obtain other information from the
  DNS. Cryptographic validation of results is performed with DNSSEC.

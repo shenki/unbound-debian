@@ -70,27 +70,8 @@ endif
 		$(CURDIR)/debian/libunbound-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/libunbound.pc
 	$(MAKE) clean
 
-ifneq (,$(filter python-unbound,$(DOPACKAGES)))
-	# third build - pyunbound for Python 2
-	PYTHON_VERSION="$(shell pyversions -vd)" \
-	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
-		dh_auto_configure -- \
-		--disable-rpath \
-		--with-pythonmodule \
-		--with-pyunbound \
-		$(CONFIGURE_ARGS)
-	$(MAKE) _unbound.la
-	install -D -m 0644 .libs/_unbound.so \
-		debian/python-unbound/usr/lib/$(shell pyversions -d)/dist-packages/_unbound.so
-	install -m 0644 \
-		pythonmod/unboundmodule.py \
-		libunbound/python/unbound.py \
-		debian/python-unbound/usr/lib/$(shell pyversions -d)/dist-packages
-	$(MAKE) clean
-endif
-
 ifneq (,$(filter python3-unbound,$(DOPACKAGES)))
-	# fourth build - pyunbound for Python 3
+	# third build -- pyunbound for Python 3
 	PYTHON_VERSION="$(shell py3versions -vd)" \
 	CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="-Wl,--as-needed $(LDFLAGS)" \
 		dh_auto_configure -- \
