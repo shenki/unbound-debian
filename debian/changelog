@@ -1,3 +1,15 @@
+unbound (1.10.0-1) unstable; urgency=medium
+
+  [ Robert Edmonds ]
+  * New upstream version 1.10.0
+  * Drop debian/patches/0002-Allow-use-of-libbsd-functions-with-configure-
+    option-.patch (applied upstream)
+
+  [ Stuart Prescott ]
+  * Drop Python 2 module package (Closes: #938752)
+
+ -- Robert Edmonds <edmonds@debian.org>  Sat, 18 Apr 2020 19:29:50 -0400
+
 unbound (1.9.6-2) unstable; urgency=medium
 
   * debian/unbound.maintscript: Remove obsolete conffile
