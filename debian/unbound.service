@@ -11,9 +11,8 @@ Restart=on-failure
 EnvironmentFile=-/etc/default/unbound
 ExecStartPre=-/usr/lib/unbound/package-helper chroot_setup
 ExecStartPre=-/usr/lib/unbound/package-helper root_trust_anchor_update
-ExecStart=/usr/sbin/unbound -d $DAEMON_OPTS
+ExecStart=/usr/sbin/unbound -d -p $DAEMON_OPTS
 ExecReload=+/bin/kill -HUP $MAINPID
-PIDFile=/run/unbound.pid
 
 [Install]
 WantedBy=multi-user.target
