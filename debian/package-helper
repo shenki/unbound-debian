@@ -60,6 +60,17 @@ do_chroot_setup() {
         rm -rf $CHROOT_DIR/$UNBOUND_BASE_DIR && mkdir -p $CHROOT_DIR/$UNBOUND_BASE_DIR
         cd /
         tar -cf - $(echo $UNBOUND_BASE_DIR | sed 's/^\///') | (cd $CHROOT_DIR && tar -xf -)
+        if [ -S "/run/systemd/notify" ]; then
+            mkdir -p "$CHROOT_DIR/run/systemd"
+            touch "$CHROOT_DIR/run/systemd/notify"
+            mount --bind "/run/systemd/notify" "$CHROOT_DIR/run/systemd/notify"
+        fi
+    fi
+}
+
+do_chroot_teardown() {
+    if [ -d "$CHROOT_DIR" ] && mountpoint -q "$CHROOT_DIR/run/systemd/notify"; then
+        umount "$CHROOT_DIR/run/systemd/notify"
     fi
 }
 
@@ -90,7 +101,12 @@ case "$1" in
         ;;
 
     chroot_setup)
+        do_chroot_teardown
         do_chroot_setup
+        ;;
+
+    chroot_teardown)
+        do_chroot_teardown
         ;;
 
     root_trust_anchor_update)
@@ -98,7 +114,7 @@ case "$1" in
         ;;
 
     *)
-        echo "Usage: $0 {resolvconf_start|resolvconf_stop|chroot_setup|root_trust_anchor_update}" >&2
+        echo "Usage: $0 {resolvconf_start|resolvconf_stop|chroot_setup|chroot_teardown|root_trust_anchor_update}" >&2
         exit 1
         ;;
 esac
