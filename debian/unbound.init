@@ -44,6 +44,7 @@ case "$1" in
         log_daemon_msg "Stopping $DESC" "$NAME"
         if start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE --name $NAME --retry 5; then
             $HELPER resolvconf_stop
+            $HELPER chroot_teardown
             log_end_msg 0
         else
             log_end_msg 1
