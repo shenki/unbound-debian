@@ -15,7 +15,6 @@ Build-Depends:
  libbsd-dev (>= 0.8.1~) [!linux-any],
  libevent-dev,
  libexpat1-dev,
- libfstrm-dev <!pkg.unbound.libonly>,
  libprotobuf-c-dev <!pkg.unbound.libonly>,
  libssl-dev <!pkg.unbound.libonly>,
  libsystemd-dev <!pkg.unbound.libonly>,
