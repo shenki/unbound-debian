@@ -1,3 +1,41 @@
+unbound (1.11.0-1) unstable; urgency=medium
+
+  The default Debian config file shipped in the unbound package has changed
+  from using the "include:" directive to using the "include-toplevel:"
+  directive in order to include the config file fragments in
+  /etc/unbound/unbound.conf.d/*.conf into the unbound configuration.
+
+  The "include-toplevel:" directive has been newly introduced in unbound
+  1.11.0 and it requires that any included config file fragment begin its own
+  clause (e.g., "server:").
+
+  The existing "include:" directive that was used in previous Debian releases
+  of the unbound package only performed textual inclusion, and it was possible
+  to construct a set of config file fragments that depended on the presence or
+  ordering of specific config file fragments in order to parse correctly. For
+  instance, a config file fragment could have specified an option that can
+  only appear in the "server:" clause, and rely on a previously included
+  config file fragment to begin that clause. This behavior is no longer
+  allowed by the use of the "include-toplevel:" directive because it is not
+  robust against config file fragments being added, removed, or reordered.
+
+  If you are upgrading the unbound package and you have installed any config
+  file fragments into /etc/unbound/unbound.conf.d/ you should check that each
+  config file fragment begins its own clause (e.g., "server:") and update each
+  config file fragment as necessary to be compatible with the behavior of the
+  "include-toplevel:" directive.
+
+  If needed, the previous behavior can be restored by changing the following
+  line in /etc/unbound/unbound.conf:
+
+      include-toplevel: "/etc/unbound/unbound.conf.d/*.conf"
+
+  to its previous setting:
+
+      include: "/etc/unbound/unbound.conf.d/*.conf"
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 09 Aug 2020 19:39:01 -0400
+
 unbound (1.5.7-2) unstable; urgency=medium
 
   The unbound package no longer ships an /etc/default/unbound conffile.
@@ -28,7 +66,7 @@ unbound (1.5.7-2) unstable; urgency=medium
       shipped with it explicitly enabled.
 
     ROOT_TRUST_ANCHOR_FILE
-    
+
       This variable can be explicitly set to override the path used by the
       root trust anchor update mechanism for the root trust anchor. Otherwise,
       it defaults to /var/lib/unbound/root.key if unset.
@@ -38,7 +76,7 @@ unbound (1.5.7-2) unstable; urgency=medium
       This variable now must be explicitly set to "false" to disable the root
       trust anchor update mechanism. Otherwise, it defaults to enabled if
       unset.
-      
+
       In previous versions, this variable had to be explicitly set to "true"
       to enable the update mechanism, but the /etc/default/unbound file
       shipped with it explicitly enabled.
@@ -62,7 +100,7 @@ unbound (1.5.7-2) unstable; urgency=medium
       This mechanism still exists, but the variable controlling it has been
       removed. Instead, add or remove the executable bit from the
       /etc/resolvconf/update.d/unbound file to enable or disable the hook.
-      
+
   This release also makes the following changes:
 
     The resolvconf update.d hook can be problematic, especially if the
