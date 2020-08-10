@@ -1,3 +1,25 @@
+unbound (1.11.0-1) unstable; urgency=medium
+
+  [ Simon Deziel ]
+  * systemd: don't create a PID file
+  * debian/package-helper: mount --bind systemd notify socket into chroot
+    (Closes: #867187)
+
+  [ Robert Edmonds ]
+  * New upstream version 1.11.0
+    - Merge PR #241 by Robert Edmonds: contrib/libunbound.pc.in: Do not use
+      "Requires:". (Closes: #958331)
+    - Introduce "include-toplevel:" configuration option.
+    - Adds its own implementation of Frame Streams for dnstap support.
+  * debian/control: Remove build dependency on libfstrm-dev
+  * debian/unbound.conf: Use "include-toplevel:" instead of "include:"
+    (Closes: #950754)
+  * debian/NEWS: Add entry for 1.11.0-1 regarding the change of
+    /etc/unbound/unbound.conf to using the "include-toplevel:" directive
+  * debian/patches/: Refresh patches
+
+ -- Robert Edmonds <edmonds@debian.org>  Sun, 09 Aug 2020 20:57:15 -0400
+
 unbound (1.10.1-1) unstable; urgency=high
 
   * New upstream version 1.10.1
