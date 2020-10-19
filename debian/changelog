@@ -1,3 +1,9 @@
+unbound (1.12.0-1) unstable; urgency=medium
+
+  * New upstream version 1.12.0
+
+ -- Robert Edmonds <edmonds@debian.org>  Mon, 19 Oct 2020 00:35:38 -0400
+
 unbound (1.11.0-1) unstable; urgency=medium
 
   [ Simon Deziel ]
