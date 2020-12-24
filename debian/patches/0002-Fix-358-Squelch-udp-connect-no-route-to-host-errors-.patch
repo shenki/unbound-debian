@@ -1,0 +1,63 @@
+From 5906811ff19f005110b2edbda5aa144ad5fa05b1 Mon Sep 17 00:00:00 2001
+From: "W.C.A. Wijngaards" <wouter@nlnetlabs.nl>
+Date: Tue, 1 Dec 2020 09:09:13 +0100
+Subject: [PATCH] - Fix #358: Squelch udp connect 'no route to host' errors on
+ low   verbosity.
+
+
+diff --git a/services/outside_network.c b/services/outside_network.c
+index 11951ade..0886907f 100644
+--- a/services/outside_network.c
++++ b/services/outside_network.c
+@@ -1745,6 +1745,33 @@ select_id(struct outside_network* outnet, struct pending* pend,
+ 	return 1;
+ }
+ 
++/** return true is UDP connect error needs to be logged */
++static int udp_connect_needs_log(int err)
++{
++	switch(err) {
++	case ECONNREFUSED:
++#  ifdef ENETUNREACH
++	case ENETUNREACH:
++#  endif
++#  ifdef EHOSTDOWN
++	case EHOSTDOWN:
++#  endif
++#  ifdef EHOSTUNREACH
++	case EHOSTUNREACH:
++#  endif
++#  ifdef ENETDOWN
++	case ENETDOWN:
++#  endif
++		if(verbosity >= VERB_ALGO)
++			return 1;
++		return 0;
++	default:
++		break;
++	}
++	return 1;
++}
++
++
+ /** Select random interface and port */
+ static int
+ select_ifport(struct outside_network* outnet, struct pending* pend,
+@@ -1804,9 +1831,11 @@ select_ifport(struct outside_network* outnet, struct pending* pend,
+ 				/* connect() to the destination */
+ 				if(connect(fd, (struct sockaddr*)&pend->addr,
+ 					pend->addrlen) < 0) {
+-					log_err_addr("udp connect failed",
+-						strerror(errno), &pend->addr,
+-						pend->addrlen);
++					if(udp_connect_needs_log(errno)) {
++						log_err_addr("udp connect failed",
++							strerror(errno), &pend->addr,
++							pend->addrlen);
++					}
+ 					sock_close(fd);
+ 					return 0;
+ 				}
+-- 
+2.29.2
+
